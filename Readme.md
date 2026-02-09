@@ -9,12 +9,12 @@ src/
 │   ├── config/
 │   └── hooks/
 │
-├── domain/                     # Dominio puro (sin UI)
+├── domain/                     # Reglas de negocio
 │   ├── user/
 │   ├── expediente/
 │   └── enums/
 │
-├── ui/                         # UI = solo representación
+├── ui/                         # Representacion de la interfaz en modelo POM, solo identifica el DOM en OOP 
 │   ├── pages/
 │   │   └── LoginPage.ts
 │   │
@@ -25,10 +25,10 @@ src/
 │   │   │   └── SubmitButton.ts
 │   │   └── tables/
 │   │
-│   └── locators/               # Opcional pero recomendado
-│       └── login.locators.ts
+│   └── locators/  # Se omite esta capa para reducir los niveles de abstraccion
+│      
 │
-├── actions/                    # Casos de uso (intención)
+├── actions/                    # Casos de uso
 │   ├── auth/
 │   │   └── submitLogin.action.ts
 │   └── expediente/
@@ -47,20 +47,20 @@ src/
 │   ├── regression/
 │   └── e2e/
 │
-├── contracts/                  # 👈 clave para agentes
+├── contracts/                  # FUTURE, Pensado para fusion con proyecto de LLM
+│   │                           # agentic, por ahora no se toma en consideracion
 │   └── ActionContract.ts
 │
 └── index.ts
 ```
 
-
+Para profundizar en la funcion de la carpeta sigue el readme correspondiente:
+- [core](./src/core/Readme.md)
 
 ### Instalacion 
 
 ``` bash
-# Instala las dependencias
-npm i
+npm install -D @playwright/test@latest
+npx playwright install --with-deps
 
-# Instala las dependencias del navegador de playwright
-npx playwright install
 ```
