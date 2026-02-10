@@ -1,0 +1,52 @@
+ls:
+  # UI Layer specific rules
+  src/ui/pages:
+    .ts: PascalCase
+
+  src/ui/components:
+    .ts: PascalCase
+
+  src/ui/forms:
+    .ts: PascalCase
+  
+  # Actions folder
+  src/actions:
+    .ts: regex:^[a-z][a-zA-Z0-9]*\.action\.ts$
+  
+  # Assertions folder
+  src/assertions:
+    .ts: regex:^[a-z][a-zA-Z0-9]*\.assert\.ts$
+  
+  # Fixtures folder
+  src/fixtures:
+    .ts: regex:^[a-z][a-zA-Z0-9]*\.fixture\.ts$
+  
+  # Tests folder
+  src/tests:
+    .ts: regex:^[a-z][a-z0-9-]*\.(spec|test)\.ts$
+  
+  # Core and domain folders - allow both naming conventions
+  src/core:
+    .ts: PascalCase | camelCase
+  
+  src/domain:
+    .ts: PascalCase | camelCase
+  
+  # General rules for other TypeScript files
+  src:
+    .ts: PascalCase | camelCase
+  
+  # Config files at root level
+  .:
+    .json: kebab-case | camelCase
+    .js: kebab-case | camelCase
+    .mjs: kebab-case | camelCase
+    .ts: kebab-case | camelCase | PascalCase
+
+ignore:
+  - node_modules
+  - dist
+  - .git
+  - playwright-report
+  - test-results
+  - .vscode
