@@ -56,6 +56,7 @@ src/
 
 Para profundizar en la funcion de la carpeta sigue el readme correspondiente:
 - [core](./src/core/Readme.md)
+- [domain](./src/domain/Readme.md)
 
 ### Instalacion 
 
