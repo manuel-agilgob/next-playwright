@@ -9,7 +9,7 @@ export async function assertLoginSuccess(page: Page) {
 
 
 // FIXME assertrion requires to be more specific.
-export async function assertLoginFailure(page: Page) {
-    const loginForm = new LoginForm(page);
-    await expect(loginForm.errorMessage).toBeVisible();
-}
+// export async function assertLoginFailure(page: Page) {
+//     const loginForm = new LoginForm(page);
+//     await expect(loginForm.errorMessage).toBeVisible();
+// }

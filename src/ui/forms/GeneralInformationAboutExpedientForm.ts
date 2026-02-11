@@ -9,7 +9,7 @@ export class GeneralInformationAboutExpedientForm {
 
 
     public get expedientNumberInput(): Locator {
-        return this.page.getByTestId('expedientNumber');
+        return this.page.locator('#expedientNumber');
     }
 
     public get expedientTypeButton(): Locator {

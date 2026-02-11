@@ -2,7 +2,13 @@ node_modules/
 dist/
 playwright-report/
 test-results/
-.env
-.env.local
+.tmp/*
+
+
 *.log
 .DS_Store
+
+# Ingore environment variable files BUT track gpg ones
+.env.local
+.env.sandbox
+.env.production

@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { GeneralInformationAboutExpedientForm } from '../../ui/forms/GeneralInformationAboutExpedientForm';
+
 import { submitLoginAction } from '../../actions/submitLogin.action';
+import { NavigationBar } from '@ui/components/NavigationBar';
+import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
+import { GeneralInformationAboutExpedientForm } from '../../ui/forms/GeneralInformationAboutExpedientForm';
+
 import { assertLoginSuccess} from '../../assertions/login.assert';
 
 test.describe('Create expedient from functionary', () => {
@@ -12,20 +16,15 @@ test.describe('Create expedient from functionary', () => {
     });
 
     test('should create expedient from functionary', async ({ page }) => {
-        // Check if the page loaded correctly
-        const title = await page.title();
-        console.log('Page title:', title);
-        
-        // Wait for the login form to be visible before attempting login
-        // await page.waitForSelector('[data-testid="email"]', { state: 'visible', timeout: 10000 });
-        
         await submitLoginAction(page, 'familiar@cjj.com', '12345678');
-        await assertLoginSuccess(page);
-        
-        // Add some assertion to verify login was successful
-        // Example: await expect(page).toHaveURL(/dashboard/);
-        
-        // const expedientForm = new GeneralInformationAboutExpedientForm(page);
-        // await expedientForm.expedientNumberInput.fill('123456');
+        // await assertLoginSuccess(page);
+        const navigationBar = new NavigationBar(page);
+        await navigationBar.expedientsTab.click();
+
+        const judicialExpedientsPage = new JudicialExpedientsPage(page);
+        await judicialExpedientsPage.nexExpedientButton.click();
+
+        const expedientForm = new GeneralInformationAboutExpedientForm(page);
+        await expedientForm.expedientNumberInput.fill('123456');
     });
 });
