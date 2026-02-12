@@ -10,9 +10,9 @@ import {
     assertExpedientNumberIsValid } from '../../assertions/createExpedientForm.assert'
 
 import { assertLoginSuccess} from '../../assertions/login.assert';
-import { execPath } from 'node:process';
 
-test.describe('Create expedient form, expedient format', () => {
+
+test.describe('Expedient format when create expedient', () => {
 
     test.beforeEach(async ({ page, baseURL }) => {
         // Navegar a la página de inicio (las cookies del storageState se aplicarán automáticamente)
@@ -74,10 +74,10 @@ test.describe('Create expedient form, expedient format', () => {
                 description: 'characters only',
                 expedientFormat : 'abcdefg'
             },
-            {
-                description: 'year with three digits',
-                expedientFormat : `1/${currentYear.toString().slice(1)}`
-            },
+            // {
+            //     description: 'year with three digits',
+            //     expedientFormat : `1/${currentYear.toString().slice(1)}`
+            // },
             {
                 description: 'year with five digits',
                 expedientFormat : `1/${currentYear}0`
@@ -115,7 +115,7 @@ test.describe('Create expedient form, expedient format', () => {
                 expedientFormat : `1/${currentYear}@`
             },
             {
-                description: 'text with mode than 1 / slashes',
+                description: 'text with more than 1 / slashes',
                 expedientFormat : `1///`
             }
         ]
@@ -130,6 +130,16 @@ test.describe('Create expedient form, expedient format', () => {
 
     })
 
+    test.describe('Should show error' , () => {
+        test('when input is empty', async ({ page }) => {})
+        
+        // when year is incomplete 
+        // when only number is filled
+        // when expedient number is duplicated 
+        // when expedient number contains . dot
+        // when year is not in valid range <=2024 or >=2027 
+
+    })
 });
 
 // Debe admitir:

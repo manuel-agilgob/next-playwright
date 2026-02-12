@@ -7,6 +7,9 @@ export class GeneralInformationAboutExpedientForm {
         this.page = page;
     }
 
+    public get expedientNumberLabel(): Locator {
+        return this.page.getByText('Número de Expediente', { exact: false });
+    }   
 
     public get expedientNumberInput(): Locator {
         return this.page.locator('#expedientNumber');
