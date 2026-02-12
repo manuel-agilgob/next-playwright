@@ -49,7 +49,8 @@
     "encrypt:env": "gpg --symmetric --cipher-algo AES256 --output .env.local.gpg .env.local",
     "decrypt:env": "gpg --decrypt --output .env.local .env.local.gpg",
 
-    "create-expedient:fun" : "npx playwright test src/tests/e2e/create-expedient-from-functionary.spec.ts --headed"
+    "create-expedient:fun" : "npx playwright test src/tests/e2e/create-expedient-from-functionary.spec.ts --headed",
+    "count:ts": "find . -type f -name \"*.ts\" -not -path \"*/node_modules/*\" -exec cat {} + | wc -l"
   }
  
 }

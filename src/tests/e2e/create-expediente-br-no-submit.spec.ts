@@ -8,7 +8,7 @@ import {
     assertExpedientNumberIsNotValid, 
     assertExpedientNumberIsEmpty, 
     assertExpedientNumberIsValid,
-    assertExpedientNumberWraperIsRed } from '../../assertions/createExpedientForm.assert'
+    assertExpedientNumberLabelIsRed } from '../../assertions/createExpedientForm.assert'
 
 import { assertLoginSuccess} from '../../assertions/login.assert';
 import { describe } from 'node:test';
@@ -148,10 +148,9 @@ test.describe('Expedient format when create expedient', () => {
                 await expedientForm.expedientNumberInput.fill(expedientFormat);
                 // assertExpedientNumberIsNotValid(page, expedientFormat);
                 await expedientForm.nextButton.click();
-                assertExpedientNumberWraperIsRed(page);
+                assertExpedientNumberLabelIsRed(page); // FIXME
             });
         });
-        
     })
 });
 

@@ -22,9 +22,9 @@ export async function assertExpedientNumberIsEmpty(page : Page) {
     
 }
 
-export async function assertExpedientNumberWraperIsRed(page : Page) {
+export async function assertExpedientNumberLabelIsRed(page : Page) {
     const expedientForm = new GeneralInformationAboutExpedientForm(page);
-    expect( expedientForm.expedientNumberInput.locator('..')).toHaveClass(/text-red-500/)    
+    expect( expedientForm.expedientNumberLabel.getAttribute('class') ).toContain('text-red-500')
 }
 
 // export async function assertLoginSuccess(page: Page) {
