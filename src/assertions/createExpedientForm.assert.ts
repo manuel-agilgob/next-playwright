@@ -22,6 +22,11 @@ export async function assertExpedientNumberIsEmpty(page : Page) {
     
 }
 
+export async function assertExpedientNumberWraperIsRed(page : Page) {
+    const expedientForm = new GeneralInformationAboutExpedientForm(page);
+    expect( expedientForm.expedientNumberInput.locator('..')).toHaveClass(/text-red-500/)    
+}
+
 // export async function assertLoginSuccess(page: Page) {
 //     const homePage = new HomePage(page);
 //     await expect(homePage.pageTitle).toBeVisible();

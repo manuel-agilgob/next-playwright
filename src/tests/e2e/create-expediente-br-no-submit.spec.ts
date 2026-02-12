@@ -7,9 +7,11 @@ import { GeneralInformationAboutExpedientForm } from '../../ui/forms/GeneralInfo
 import { 
     assertExpedientNumberIsNotValid, 
     assertExpedientNumberIsEmpty, 
-    assertExpedientNumberIsValid } from '../../assertions/createExpedientForm.assert'
+    assertExpedientNumberIsValid,
+    assertExpedientNumberWraperIsRed } from '../../assertions/createExpedientForm.assert'
 
 import { assertLoginSuccess} from '../../assertions/login.assert';
+import { describe } from 'node:test';
 
 
 test.describe('Expedient format when create expedient', () => {
@@ -130,34 +132,26 @@ test.describe('Expedient format when create expedient', () => {
 
     })
 
-    test.describe('Should show error' , () => {
-        test('when input is empty', async ({ page }) => {})
+    // No debe permitir el envio del formulario si el número de expediente no es válido
+    test.describe('Should show an error after clicking next' , () => {
         
-        // when year is incomplete 
-        // when only number is filled
-        // when expedient number is duplicated 
-        // when expedient number contains . dot
-        // when year is not in valid range <=2024 or >=2027 
+        const invalidFormats = [
+            { description: 'Year is incomplete', expedientFormat : `1/200` },
+            { description: 'Year is to far in the past', expedientFormat : `1/2000` },
+            { description: 'Year is to far in the future', expedientFormat : `1/${currentYear + 5}` },
+            { description: 'Expedient number is duplicated', expedientFormat : `1/${currentYear}` },
+        ];
 
+        invalidFormats.forEach(({description, expedientFormat}) => {
+            test( description , async ({ page }) => {
+                const expedientForm = new GeneralInformationAboutExpedientForm(page);
+                await expedientForm.expedientNumberInput.fill(expedientFormat);
+                // assertExpedientNumberIsNotValid(page, expedientFormat);
+                await expedientForm.nextButton.click();
+                assertExpedientNumberWraperIsRed(page);
+            });
+        });
+        
     })
 });
 
-// Debe admitir:
-//  w   Formato exacto: número/año (ej. 151/2025).
-//  w   Solo números antes y después de la diagonal.
-//  w   Año de 4 dígitos (incluye año actual +1).
-//  p  Números únicos por juzgado.
-//  w  Sufijos por tipo (ej. BIS) sin afectar consecutivo.
-//     Validación en tiempo real.
-//     Guardar solo si no hay errores.
-//     Funcionamiento correcto en móvil y tablet.
-// No debe admitir:
-//     Letras en número o año.
-//     Año incompleto.
-//     Separadores distintos a “/”.
-//     Formato sin diagonal.
-//     Espacios en el formato.
-//     Números decimales.
-//     Campo vacío.
-//     Números duplicados.
-//     Guardar con errores activos.

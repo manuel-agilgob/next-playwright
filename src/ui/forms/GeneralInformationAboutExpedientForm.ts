@@ -41,6 +41,9 @@ export class GeneralInformationAboutExpedientForm {
             .locator('..');
     }
 
+    public get nextButton(): Locator {
+        return this.page.getByRole('button', { name: 'Siguiente' });
+    }
 
     
 }
