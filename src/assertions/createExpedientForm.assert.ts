@@ -10,18 +10,16 @@ export async function assertExpedientNumberIsValid(page : Page, textContent : st
     
 }
 
-export async function assertExpedientNumberIsNotValid(page : Page, textContent : string) {
+export async function assertExpNumberNotContainsInvalidChars(page : Page, invalidChars : string) {
     const expedientForm = new GeneralInformationAboutExpedientForm(page);
     expect( await expedientForm.expedientNumberInput
-        .inputValue()).not.toContain( textContent )
-    
+        .inputValue()).not.toContain( invalidChars )
 }
 
-export async function assertExpedientNumberIsEmpty(page : Page) {
+export async function assertExpedientNumberShouldNotAcceptFormat(page : Page, invalidFormat : string) {
     const expedientForm = new GeneralInformationAboutExpedientForm(page);
     expect( await expedientForm.expedientNumberInput
-        .inputValue()).toBe('')
-    
+        .inputValue()).not.toContain( invalidFormat )
 }
 
 export async function assertExpedientGeneralInformationIsCorrect(page : Page, expedient : Expedient) {
@@ -36,17 +34,11 @@ export async function assertExpedientGeneralInformationIsCorrect(page : Page, ex
         await expect(expedientSideBar.mainActionValue).toHaveText(expedient.mainAction);
 }
 
+export async function assertExpLabelIsVisibleAndRed(page : Page) {
+    const expedientForm = new GeneralInformationAboutExpedientForm(page);
+    await expect(expedientForm.expedientNumberLabel).toBeVisible();
+    await expect(expedientForm.expedientNumberLabel).toHaveClass(/text-red-500/);
 
-// FIXME
-// export async function assertExpedientNumeberLabelTurnsRed(page : Page) {
-//     const expedientForm = new GeneralInformationAboutExpedientForm(page);
-//     expect(
-//         await expedientForm.expedientNumberLabel
-//         .locator('..')
-//     ).toContain('text-red-500');
-// }
-// export async function assertLoginSuccess(page: Page) {
-//     const homePage = new HomePage(page);
-//     await expect(homePage.pageTitle).toBeVisible();
-// }
+}
+
 

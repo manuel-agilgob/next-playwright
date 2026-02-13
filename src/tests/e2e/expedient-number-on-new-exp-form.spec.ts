@@ -1,15 +1,18 @@
 import { test, expect } from '@playwright/test';
 
-import { submitLoginAction } from '../../actions/submitLogin.action';
+
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
 import { GeneralInformationAboutExpedientForm } from '../../ui/forms/GeneralInformationAboutExpedientForm';
 import { 
-    assertExpedientNumberIsNotValid, 
-    assertExpedientNumberIsEmpty, 
-    assertExpedientNumberIsValid } from '../../assertions/createExpedientForm.assert'
+    assertExpedientNumberIsValid,
+    assertExpNumberNotContainsInvalidChars,
+    assertExpedientNumberShouldNotAcceptFormat,
+    assertExpLabelIsVisibleAndRed 
+} from '../../assertions/createExpedientForm.assert';
 
-import { assertLoginSuccess} from '../../assertions/login.assert';
+import { assertExpedientGeneralInformationIsCorrect } from '@assertions/createExpedientForm.assert';
+import { buildExpedient } from '../../data-builders/expedients/expedient-number-validation';  
 
 
 test.describe('Expedient format when create expedient', () => {
@@ -36,7 +39,7 @@ test.describe('Expedient format when create expedient', () => {
     const nextYear = new Date().getFullYear() + 1;
     const futureYear = new Date().getFullYear() + 2;
 
-    test.describe('Expedient number input should admit', () => {
+    test.describe('Input valid formats', () => {
 
         const validFormats = [
             {
@@ -64,27 +67,16 @@ test.describe('Expedient format when create expedient', () => {
                 assertExpedientNumberIsValid(page, expedientFormat);
 
                 await expedientForm.nextButton.click();
-                
+                page.screenshot();
             });
         });
     
     })
 
-    test.describe('Expedient number input should not admit', () => {
+    test.describe('Input invalid formats', () => {
 
         const invalidFormats = [
-            {
-                description: 'characters only',
-                expedientFormat : 'abcdefg'
-            },
-            // {
-            //     description: 'year with three digits',
-            //     expedientFormat : `1/${currentYear.toString().slice(1)}`
-            // },
-            {
-                description: 'year with five digits',
-                expedientFormat : `1/${currentYear}0`
-            },
+
             {
                 description: 'separator different than /',
                 expedientFormat : `1-${currentYear}`
@@ -94,32 +86,24 @@ test.describe('Expedient format when create expedient', () => {
                 expedientFormat : `1${currentYear}`
             },
             {
+                description: 'year too old',
+                expedientFormat : `1/1500`
+            },
+            {
+                description: 'year in the far future',
+                expedientFormat : `1/3000`
+            },
+            {
+                description: 'year too old with suffix',
+                expedientFormat : `1/1500BIS`
+            },
+            {
                 description: 'valid format two years later',
                 expedientFormat : `1/${futureYear}`
             },
             {
-                description: 'valid format two years later and posfix',
+                description: 'valid format two years later with posfix',
                 expedientFormat : `1/${futureYear}BIS`
-            },
-            {
-                description: 'suffix with special characters #',
-                expedientFormat : `1/${currentYear}#`
-            },
-            {
-                description: 'suffix with special characters $%^',
-                expedientFormat : `1/${currentYear}$%^`
-            },
-            {
-                description: 'suffix with special characters &*()',
-                expedientFormat : `1/${currentYear}&*()`
-            },
-            {
-                description: 'suffix with special character @',
-                expedientFormat : `1/${currentYear}@`
-            },
-            {
-                description: 'text with more than 1 / slashes',
-                expedientFormat : `1///`
             }
         ]
 
@@ -127,20 +111,142 @@ test.describe('Expedient format when create expedient', () => {
             test( description , async ({ page }) => {
                 const expedientForm = new GeneralInformationAboutExpedientForm(page);
                 await expedientForm.expedientNumberInput.fill(expedientFormat);
-                assertExpedientNumberIsNotValid(page, expedientFormat);
+                assertExpedientNumberShouldNotAcceptFormat(page, expedientFormat);
+                page.screenshot();
             });
         });
 
     })
 
-    test.describe('Should show error' , () => {
-        test('when input is empty', async ({ page }) => {})
-        
-        // when year is incomplete 
-        // when only number is filled
-        // when expedient number is duplicated 
-        // when expedient number contains . dot
-        // when year is not in valid range <=2024 or >=2027 
+    test.describe('Input invalid characters' , () => {
+
+        const invalidCharsFormats = [
+            {
+                description: 'dot character',
+                expedientFormat : `1/.`,
+                invalidChars: '.'
+            },
+            {
+                description: 'comma character',
+                expedientFormat : `1/,`,
+                invalidChars: ','
+            },
+            {
+                description: 'semicolon character',
+                expedientFormat : `1/;`,
+                invalidChars: ';'
+            }, 
+            {
+                description: 'double separator' ,
+                expedientFormat : `1//`,
+                invalidChars: '//'
+            },
+            {
+                description: 'space character',
+                expedientFormat : `1/ `,
+                invalidChars: ' '
+            },
+            {
+                description: 'backslash character',
+                expedientFormat : `1/\\`,
+                invalidChars: '\\'
+            },
+            {
+                description: 'five digits ',
+                expedientFormat : `1/20259`,
+                invalidChars: '9'
+            },
+            {
+                description: 'characters after separator without year',
+                expedientFormat : `1/abc`,
+                invalidChars: 'abc'
+            },
+            {
+                description: 'characters before separator without year',
+                expedientFormat : `abc/2025`,
+                invalidChars: 'abc'
+            }
+        ];
+
+        invalidCharsFormats.forEach(testCase => {
+            test(testCase.description, async ({ page }) => {
+                const expedientForm = new GeneralInformationAboutExpedientForm(page);
+                await expedientForm.expedientNumberInput.fill(testCase.expedientFormat);
+                assertExpNumberNotContainsInvalidChars(page, testCase.invalidChars);
+                page.screenshot();
+            });
+        });
+    })
+
+
+    test.describe('Form invalid formats on submit', () => {
+
+        const invalidFormats = [
+
+            {
+                description: 'separator different than /',
+                expedientFormat : `1-${currentYear}`
+            },
+            {   
+                description: 'format without separator',
+                expedientFormat : `1${currentYear}`
+            },
+            {
+                description: 'year too old',
+                expedientFormat : `1/1500`
+            },
+            {
+                description: 'year in the far future',
+                expedientFormat : `1/3000`
+            },
+            {
+                description: 'year too old with suffix',
+                expedientFormat : `1/1500BIS`
+            },
+            {
+                description: 'valid format two years later',
+                expedientFormat : `1/${futureYear}`
+            },
+            {
+                description: 'valid format two years later with posfix',
+                expedientFormat : `1/${futureYear}BIS`
+            },
+            {
+                description: 'incomplete year',
+                expedientFormat : `1/20`
+            },
+            {
+                description: 'non numeric year',
+                expedientFormat : `1/ABCD`
+            },
+            {
+                description: 'missing number before separator',
+                expedientFormat : `/2025`
+            }
+        ]
+
+        invalidFormats.forEach(({description, expedientFormat}) => {
+            test( description , async ({ page }) => {
+
+                const expedientForm = new GeneralInformationAboutExpedientForm(page);
+                let expedient = buildExpedient({expedientNumber: expedientFormat});
+
+                await expedientForm.expedientNumberInput.fill( expedient.expedientNumber );
+                await expedientForm.matterMultiselect.pickOption(expedient.matter);
+                await expedientForm.legalWayMultiselect.pickOption(expedient.legalWay);
+                await expedientForm.kindExpedientMultiselect.pickOption(expedient.kindExpedient);
+                await expedientForm.kindJudgementMultiselect.pickOption(expedient.kindJudgement);
+                await expedientForm.mainActionMultiselect.pickOption(expedient.mainAction);
+            
+                await expedientForm.nextButton.click();
+                page.screenshot();
+                await assertExpLabelIsVisibleAndRed(page);
+                
+            });
+        });
 
     })
+
+
+
 });

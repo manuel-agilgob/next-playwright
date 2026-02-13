@@ -11,14 +11,18 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  // reporter: 'html',
-  reporter: 'list',
+  reporter: 'html',
+  
+  // reporter: 'list',
+  // reporter: 'dot',
   
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3002',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    // trace: 'on-first-retry',
+    // screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    screenshot: 'on',
+    trace: 'on'
   },
 
   projects: [
@@ -40,7 +44,7 @@ export default defineConfig({
         ...devices['Desktop Firefox'],
         storageState: '.tmp/auth.json'
        },
-      // dependencies : ['setup']
+      dependencies : ['setup']
     },
     // {
     //   name: 'webkit',
