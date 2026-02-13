@@ -3,7 +3,7 @@
 import {Page, Locator} from '@playwright/test';
 
 
-export class ExpedientGeneralInformationSideBar {
+export class AddPartToExpedientWrapper {
     
     private readonly page: Page;
 

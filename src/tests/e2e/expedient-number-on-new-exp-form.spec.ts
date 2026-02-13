@@ -28,7 +28,7 @@ test.describe('Expedient format when create expedient', () => {
         await navigationBar.expedientsTab.click();
 
         const judicialExpedientsPage = new JudicialExpedientsPage(page);
-        await judicialExpedientsPage.nexExpedientButton.click();
+        await judicialExpedientsPage.newExpedientButton.click();
     });
 
     const lastYear = new Date().getFullYear() - 1;

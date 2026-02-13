@@ -7,7 +7,7 @@ export class JudicialExpedientsPage {
         this.page = page;
     }
     
-    public get nexExpedientButton(): Locator {
+    public get newExpedientButton(): Locator {
         return this.page.getByRole('button', { name: 'Nuevo Expediente' });
     }
 }
