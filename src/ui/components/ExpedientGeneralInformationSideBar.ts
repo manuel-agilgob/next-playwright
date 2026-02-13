@@ -36,19 +36,19 @@ export class ExpedientGeneralInformationSideBar {
     }
 
     // Tipo de Expediente
-    get expedientTypeLabel(): Locator {
+    get kindExpedientLabel(): Locator {
         return this.page.getByText('Tipo de Expediente');
     }
-    get expedientTypeValue(): Locator {
-        return this.expedientTypeLabel.locator('..').locator('p.font-semibold');
+    get kindExpedientValue(): Locator {
+        return this.kindExpedientLabel.locator('..').locator('p.font-semibold');
     }
 
     // Tipo de Juicio
-    get trialTypeLabel(): Locator {
+    get kindJudgementLabel(): Locator {
         return this.page.getByText('Tipo de Juicio');
     }
-    get trialTypeValue(): Locator {
-        return this.trialTypeLabel.locator('..').locator('p.font-semibold');
+    get kindJudgementValue(): Locator {
+        return this.kindJudgementLabel.locator('..').locator('p.font-semibold');
     }
 
     // Materia
@@ -60,11 +60,11 @@ export class ExpedientGeneralInformationSideBar {
     }
 
     // Vía
-    get pathLabel(): Locator {
+    get legalWayLabel(): Locator {
         return this.page.getByText('Vía', { exact: true });
     }
-    get pathValue(): Locator {
-        return this.pathLabel.locator('..').locator('p.font-semibold');
+    get legalWayValue(): Locator {
+        return this.legalWayLabel.locator('..').locator('p.font-semibold');
     }
 
     // Accion Principal

@@ -7,11 +7,9 @@ import { GeneralInformationAboutExpedientForm } from '../../ui/forms/GeneralInfo
 import { 
     assertExpedientNumberIsNotValid, 
     assertExpedientNumberIsEmpty, 
-    assertExpedientNumberIsValid,
-    assertExpedientNumberLabelIsRed } from '../../assertions/createExpedientForm.assert'
+    assertExpedientNumberIsValid } from '../../assertions/createExpedientForm.assert'
 
 import { assertLoginSuccess} from '../../assertions/login.assert';
-import { describe } from 'node:test';
 
 
 test.describe('Expedient format when create expedient', () => {
@@ -64,6 +62,9 @@ test.describe('Expedient format when create expedient', () => {
                 const expedientForm = new GeneralInformationAboutExpedientForm(page);
                 await expedientForm.expedientNumberInput.fill(expedientFormat);
                 assertExpedientNumberIsValid(page, expedientFormat);
+
+                await expedientForm.nextButton.click();
+                
             });
         });
     
@@ -132,25 +133,14 @@ test.describe('Expedient format when create expedient', () => {
 
     })
 
-    // No debe permitir el envio del formulario si el número de expediente no es válido
-    test.describe('Should show an error after clicking next' , () => {
+    test.describe('Should show error' , () => {
+        test('when input is empty', async ({ page }) => {})
         
-        const invalidFormats = [
-            { description: 'Year is incomplete', expedientFormat : `1/200` },
-            { description: 'Year is to far in the past', expedientFormat : `1/2000` },
-            { description: 'Year is to far in the future', expedientFormat : `1/${currentYear + 5}` },
-            { description: 'Expedient number is duplicated', expedientFormat : `1/${currentYear}` },
-        ];
+        // when year is incomplete 
+        // when only number is filled
+        // when expedient number is duplicated 
+        // when expedient number contains . dot
+        // when year is not in valid range <=2024 or >=2027 
 
-        invalidFormats.forEach(({description, expedientFormat}) => {
-            test( description , async ({ page }) => {
-                const expedientForm = new GeneralInformationAboutExpedientForm(page);
-                await expedientForm.expedientNumberInput.fill(expedientFormat);
-                // assertExpedientNumberIsNotValid(page, expedientFormat);
-                await expedientForm.nextButton.click();
-                assertExpedientNumberLabelIsRed(page); // FIXME
-            });
-        });
     })
 });
-

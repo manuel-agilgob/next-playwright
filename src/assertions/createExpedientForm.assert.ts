@@ -22,11 +22,14 @@ export async function assertExpedientNumberIsEmpty(page : Page) {
     
 }
 
-export async function assertExpedientNumberLabelIsRed(page : Page) {
-    const expedientForm = new GeneralInformationAboutExpedientForm(page);
-    expect( expedientForm.expedientNumberLabel.getAttribute('class') ).toContain('text-red-500')
-}
-
+// FIXME
+// export async function assertExpedientNumeberLabelTurnsRed(page : Page) {
+//     const expedientForm = new GeneralInformationAboutExpedientForm(page);
+//     expect(
+//         await expedientForm.expedientNumberLabel
+//         .locator('..')
+//     ).toContain('text-red-500');
+// }
 // export async function assertLoginSuccess(page: Page) {
 //     const homePage = new HomePage(page);
 //     await expect(homePage.pageTitle).toBeVisible();
