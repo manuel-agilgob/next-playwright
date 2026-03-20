@@ -1,37 +1,132 @@
 import { Page, Locator } from '@playwright/test';
-
 import { Multiselect } from '@ui/components/Multiselect.component';
+import { RadioGroup } from '@ui/components/RadioGroup.component';
 
-export class GeneralInformationAboutExpedientForm {
+export class AddNewPartForm {
     private readonly page: Page;
 
-    public readonly partyTypeMultiselect: Multiselect;
-    public readonly clasificationMultiselect: Multiselect;
-    public readonly partyRegimeMultiselect: Multiselect;
-    public readonly genderMultiselect: Multiselect;
-    public readonly canReadAndWriteMultiselect: Multiselect;
-    public readonly gradeOfStudiesMultiselect: Multiselect;
-    public readonly nationalityMultiselect: Multiselect;
-    public readonly speakesSpanishMultiselect: Multiselect;
-    public readonly civilStatusMultiselect: Multiselect;
-    public readonly occupationMultiselect: Multiselect;
+    public readonly contactSection: ContactSection;
+    public readonly transparencySection : TransparencyAndLegalInformationSection;
+    public readonly personalSection: PersonalSection;
 
+    constructor(page: Page) {
+
+        this.page = page;
+        this.contactSection = new ContactSection(page);
+        this.transparencySection = new TransparencyAndLegalInformationSection(page);
+        this.personalSection = new PersonalSection(page);
+    }
+
+}
+
+
+class ContactSection {
+    private readonly page: Page;
 
     constructor(page: Page) {
         this.page = page;
-
-        this.partyTypeMultiselect = new Multiselect(this.page, 'Tipo de Parte');
-        this.clasificationMultiselect = new Multiselect(this.page, 'Clasificación');
-        this.partyRegimeMultiselect = new Multiselect(this.page, 'Régimen de la Parte');
-        this.genderMultiselect = new Multiselect(this.page, 'Género');
-        this.canReadAndWriteMultiselect = new Multiselect(this.page, '¿Puede Leer y Escribir?');
-        this.gradeOfStudiesMultiselect = new Multiselect(this.page, 'Grado de Estudios');
-        this.nationalityMultiselect = new Multiselect(this.page, 'Nacionalidad');
-        this.speakesSpanishMultiselect = new Multiselect(this.page, '¿Sabe hablar español?');
-        this.civilStatusMultiselect = new Multiselect(this.page, 'Estado Civil');
-        this.occupationMultiselect = new Multiselect(this.page, 'Ocupación');
     }
 
-    
+    get emailInput(): Locator {
+        return this.page.getByLabel('Correo electrónico');
+    }
 
+    get phoneNumberInput(): Locator {
+        return this.page.getByLabel('Teléfono');
+    }
+
+    get addressInput(): Locator {
+        return this.page.getByLabel('Domicilio / residencia');
+    }
+}
+
+class PersonalSection {
+
+    private readonly page: Page;
+
+    constructor(page: Page) {
+        this.page = page;
+    }
+
+    get clasificationMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Clasificación');
+    }
+
+    get sexMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Sexo');
+    }
+
+    get genderMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Género');
+    }
+
+
+    get partyRegimeMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Régimen de la Parte');
+    }
+
+
+    get occupationInput(): Locator {
+        return this.page.getByLabel('Ocupación');
+    }
+
+    get nameInput(): Locator {
+        return this.page.getByLabel('* Nombres');
+    }
+
+    get paternalLastNameInput(): Locator {
+        return this.page.getByLabel('* Apellido Paterno');
+    }
+    
+    get maternalLastNameInput(): Locator {
+        return this.page.getByLabel('Apellido Materno');
+    }
+
+    get aliasInput(): Locator {
+        return this.page.getByLabel('Alias');
+    }
+    
+    // get dateOfBirthCalendar(): Locator {
+        // TODO Crear el componente de calendarios
+    // }
+
+    get ageInput(): Locator {
+        return this.page.getByLabel('Edad');
+    }
+}
+
+class TransparencyAndLegalInformationSection {
+    private readonly page: Page;
+
+    constructor(page: Page) {
+        this.page = page;
+    }
+
+    get nationalityMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Nacionalidad');
+    }
+
+    get speakesSpanishMultiselect(): Multiselect {
+        return new Multiselect(this.page, '¿Sabe hablar español?');
+    }
+
+    get civilStatusMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Estado Civil');
+    }
+
+    get belongsToIndigenousGroupRadioGroup(): RadioGroup {
+        return new RadioGroup(this.page, '¿Pertenece a una comunidad indígena?');
+    }
+
+    get canReadAndWriteMultiselect(): Multiselect {
+        return this.canReadAndWriteMultiselect;
+    }
+
+    get gradeOfStudiesMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Grado de Estudios');
+    }
+
+    // get belongsToIndigenousGroupRadio(): RadioGroup {
+    //     // TODO Crear el componente de RadioGroup
+    // }
 }
