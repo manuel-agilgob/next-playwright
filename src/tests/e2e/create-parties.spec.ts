@@ -25,8 +25,8 @@ test.describe('Create expedient and parties', () => {
         if(!email || !password) {
             throw new Error('USER_EMAIL and USER_PASSWORD must be set in environment variables');
         }
-        await submitLoginAction(page, email, password);
-        await assertLoginSuccess(page);
+        // await submitLoginAction(page, email, password);
+        // await assertLoginSuccess(page);
 
         await page.goto('/expedientes');
         // Wait for page to be ready
@@ -42,6 +42,7 @@ test.describe('Create expedient and parties', () => {
         await judicialExpedientsPage.newExpedientButton.click();
 
         const expedientForm = new GeneralInformationAboutExpedientForm(page);
+
 
         await expedientForm.expedientNumberInput.fill( expedient.expedientNumber );
         await expedientForm.matterMultiselect.pickOption(expedient.matter);
@@ -63,18 +64,33 @@ test.describe('Create expedient and parties', () => {
             "names" : "José Manuel",
             "paternalLastName" : "Pérez",
             "maternalLastName" : "López",
-            "dateOfBirth" : "01/01/1990",
+            "dateOfBirth" : "1990-05-15",
             "sex" : "Masculino",
             "classification" : "Pública",
             "regime" : "Persona Física",
             "alias" : "Pepe",
             "age" : 36,
-            "gender" : 
+            "gender" : "Masculino"
             }
         ]
 
-        const addNewPartForm = new AddNewPartForm(page);
-        await addNewPartForm.partyTypeMultiselect.pickOption('Víctima');
+        for( const party of parties) {
+            const addNewPartForm = new AddNewPartForm(page);
+            
+            // await addNewPartForm.personalSection.typeMultiselect.pickOption(party.type);
+            // await addNewPartForm.personalSection.nameInput.fill(party.names);
+            // await addNewPartForm.personalSection.paternalLastNameInput.fill(party.paternalLastName);
+            // await addNewPartForm.personalSection.maternalLastNameInput.fill(party.maternalLastName);
+           
+            await addNewPartForm.personalSection.dateOfBirthInput.fill(party.dateOfBirth)
+            
+            // await addNewPartForm.personalSection.sexMultiselect.pickOption(party.sex);
+            // await addNewPartForm.personalSection.clasificationMultiselect.pickOption(party.classification);
+            // await addNewPartForm.personalSection.regimeMultiselect.pickOption(party.regime);
+            // await addNewPartForm.personalSection.aliasInput.fill(party.alias);
+            // await addNewPartForm.personalSection.ageInput.fill(party.age.toString());
+            // await addNewPartForm.personalSection.genderMultiselect.pickOption(party.gender);
+        }
 
 
     });

@@ -10,15 +10,74 @@ export class AddNewPartForm {
     public readonly personalSection: PersonalSection;
 
     constructor(page: Page) {
-
         this.page = page;
         this.contactSection = new ContactSection(page);
         this.transparencySection = new TransparencyAndLegalInformationSection(page);
         this.personalSection = new PersonalSection(page);
     }
-
 }
 
+
+
+
+class PersonalSection {
+
+    private readonly page: Page;
+
+    constructor(page: Page) {
+        this.page = page;
+    }
+
+    get typeMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Tipo de Parte *');
+    }
+
+    get clasificationMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Clasificación *');
+    }
+
+    get sexMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Sexo *');
+    }
+
+    get genderMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Género');
+    }
+
+    get regimeMultiselect(): Multiselect {
+        return new Multiselect(this.page, 'Régimen de la Parte');
+    }
+
+    get occupationInput(): Locator {
+        return this.page.getByLabel('Ocupación');
+    }
+
+    get nameInput(): Locator {
+        return this.page.getByRole('textbox', { name: 'Nombres' })
+    }
+
+    get paternalLastNameInput(): Locator {
+        return this.page.getByRole('textbox', { name: 'Apellido paterno' })
+    }
+    
+    get maternalLastNameInput(): Locator {
+        return this.page.getByRole('textbox', { name: 'Apellido materno' })
+    }
+
+    get aliasInput(): Locator {
+        return this.page.getByRole('textbox', { name: 'Alias o apodo' })
+    }
+    
+    get dateOfBirthInput(): Locator {
+        // TODO Crear un componente específico para el calendario
+        // para poder validar dias festivos, fines de semana, etc.
+        return this.page.locator('input[type="date"]')
+    }
+
+    get ageInput(): Locator {
+        return this.page.getByPlaceholder('Edad');
+    }
+}
 
 class ContactSection {
     private readonly page: Page;
@@ -37,61 +96,6 @@ class ContactSection {
 
     get addressInput(): Locator {
         return this.page.getByLabel('Domicilio / residencia');
-    }
-}
-
-class PersonalSection {
-
-    private readonly page: Page;
-
-    constructor(page: Page) {
-        this.page = page;
-    }
-
-    get clasificationMultiselect(): Multiselect {
-        return new Multiselect(this.page, 'Clasificación');
-    }
-
-    get sexMultiselect(): Multiselect {
-        return new Multiselect(this.page, 'Sexo');
-    }
-
-    get genderMultiselect(): Multiselect {
-        return new Multiselect(this.page, 'Género');
-    }
-
-
-    get partyRegimeMultiselect(): Multiselect {
-        return new Multiselect(this.page, 'Régimen de la Parte');
-    }
-
-
-    get occupationInput(): Locator {
-        return this.page.getByLabel('Ocupación');
-    }
-
-    get nameInput(): Locator {
-        return this.page.getByLabel('* Nombres');
-    }
-
-    get paternalLastNameInput(): Locator {
-        return this.page.getByLabel('* Apellido Paterno');
-    }
-    
-    get maternalLastNameInput(): Locator {
-        return this.page.getByLabel('Apellido Materno');
-    }
-
-    get aliasInput(): Locator {
-        return this.page.getByLabel('Alias');
-    }
-    
-    // get dateOfBirthCalendar(): Locator {
-        // TODO Crear el componente de calendarios
-    // }
-
-    get ageInput(): Locator {
-        return this.page.getByLabel('Edad');
     }
 }
 
