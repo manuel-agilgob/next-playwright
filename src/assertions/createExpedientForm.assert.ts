@@ -52,23 +52,19 @@ export async function assertSummaryCardInformationIsCorrect(page : Page, parties
 }) {
     const nwe = new CreateNewExpedientPage(page)
     await expect(nwe.summaryCard.container).toBeVisible();
-    await expect(nwe.summaryCard.actorsText).toBeVisible();
-    await expect(nwe.summaryCard.defendantsText).toBeVisible();
-    await expect(nwe.summaryCard.lawyersText).toBeVisible();
-    await expect(nwe.summaryCard.totalPartiesText).toBeVisible();
+    await expect(nwe.summaryCard.getValue('Actores')).toBeVisible();
+    await expect(nwe.summaryCard.getValue('Demandados')).toBeVisible();
+    await expect(nwe.summaryCard.getValue('Abogados')).toBeVisible();
+    await expect(nwe.summaryCard.getValue('Total de Partes')).toBeVisible();
 
-    await expect(nwe.summaryCard.totalPartiesNumber).toBeVisible();
-    await expect(nwe.summaryCard.actorsNumber).toBeVisible();
-    await expect(nwe.summaryCard.defendantsNumber).toBeVisible();
-    await expect(nwe.summaryCard.lawyersNumber).toBeVisible();
+    console.log('Total Parties:', await nwe.summaryCard.getValue('Total de partes').textContent());
+    console.log('Actors:', await nwe.summaryCard.getValue('Actores').textContent());
+    console.log('Defendants:', await nwe.summaryCard.getValue('Demandados').textContent());
+    console.log('Lawyers:', await nwe.summaryCard.getValue('Abogados').textContent());
 
-    console.log('Total Parties:', await nwe.summaryCard.totalPartiesNumber.textContent());
-    console.log('Actors:', await nwe.summaryCard.actorsNumber.textContent());
-    console.log('Defendants:', await nwe.summaryCard.defendantsNumber.textContent());
-    console.log('Lawyers:', await nwe.summaryCard.lawyersNumber.textContent());
-    // await expect(nwe.summaryCard.totalPartiesNumber).toHaveText(partiesQantity.totalParties.toString());
-    // await expect(nwe.summaryCard.actorsNumber).toHaveText(partiesQantity.actors.toString());
-    // await expect(nwe.summaryCard.defendantsNumber).toHaveText(partiesQantity.defendants.toString());
-    // await expect(nwe.summaryCard.lawyersNumber).toHaveText(partiesQantity.lawyers.toString());
+    await expect(nwe.summaryCard.getValue('Total de partes')).toHaveText(partiesQantity.totalParties.toString());
+    await expect(nwe.summaryCard.getValue('Actores')).toHaveText(partiesQantity.actors.toString());
+    await expect(nwe.summaryCard.getValue('Demandados')).toHaveText(partiesQantity.defendants.toString());
+    await expect(nwe.summaryCard.getValue('Abogados')).toHaveText(partiesQantity.lawyers.toString());
 }
 

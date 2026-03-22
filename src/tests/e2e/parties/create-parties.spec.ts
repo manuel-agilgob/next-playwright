@@ -108,8 +108,8 @@ test.describe('Create expedient and parties', () => {
         // await principalPartyCard.addLegalRepresentativeButton.click();
         // await fillPartyForm(page, actorSecondRepresentative, 'Representative');
         await expedientForm.nextButton.click();
-        await page.pause();
-        assertSummaryCardInformationIsCorrect(page, {
+        // await page.pause();
+        await assertSummaryCardInformationIsCorrect(page, {
             totalParties: 1,
             actors: 1,
             defendants: 0,

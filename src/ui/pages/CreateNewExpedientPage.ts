@@ -78,36 +78,14 @@ class SummaryCard {
             has: this.page.getByRole('heading', { name: 'Resumen' })
         })
     }
-
-    get totalPartiesText(): Locator {
-        return this.container.locator('text=Partes:')
+    
+    getRow(label: string): Locator {
+        return this.container.locator('div.flex', {
+            has: this.page.getByText(label)
+        });
     }
 
-    get totalPartiesNumber(): Locator {
-        return this.totalPartiesText.locator('..').locator('span.font-medium')
-    }
-
-    get actorsText(): Locator {
-        return this.container.locator('text=Actores:')
-    }
-
-    get actorsNumber(): Locator {
-        return this.actorsText.locator('..').locator('span.font-medium')
-    }
-
-    get defendantsText(): Locator {
-        return this.container.locator('text=Demandados:')
-    }
-
-    get defendantsNumber(): Locator {
-        return this.defendantsText.locator('..').locator('span.font-medium')
-    }
-
-    get lawyersText(): Locator {
-        return this.container.locator('text=Abogados:')
-    }
-
-    get lawyersNumber(): Locator {
-        return this.lawyersText.locator('..').locator('span.font-medium')
+    getValue(label: string): Locator {
+        return this.getRow(label).locator('span.font-medium');
     }
 }
