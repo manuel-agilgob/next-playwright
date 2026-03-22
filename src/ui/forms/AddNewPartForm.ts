@@ -19,6 +19,10 @@ export class AddNewPartForm {
     get addPartyButton(): Locator {
         return this.page.getByRole('button', { name: 'Agregar Parte' });
     }
+
+    get addRepresentativeButton(): Locator {
+        return this.page.getByRole('button', { name: 'Agregar Representante' });
+    }
 }
 
 

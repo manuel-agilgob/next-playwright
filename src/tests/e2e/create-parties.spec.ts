@@ -105,7 +105,7 @@ test.describe('Create expedient and parties', () => {
         await fillPartyForm(page, principalParty);
         const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(principalParty);
         await principalPartyCard.addLegalRepresentativeButton.click();
-        await fillPartyForm(page, secondaryParty);
+        await fillPartyForm(page, secondaryParty, 'Representative');
         
         
 

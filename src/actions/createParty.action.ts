@@ -3,7 +3,7 @@ import { Page } from '@playwright/test';
 import { AddNewPartForm } from '@ui/forms/AddNewPartForm';
 import { IParty } from '@contracts/IParty.type';
 
-export async function fillPartyForm(page: Page, party: IParty): Promise<void> {
+export async function fillPartyForm(page: Page, party: IParty, kind='Actor'): Promise<void> {
     const addNewPartForm = new AddNewPartForm(page);
     // Personal Data
     await addNewPartForm.personalSection.typeMultiselect.pickOption(party.type, false);
@@ -34,5 +34,10 @@ export async function fillPartyForm(page: Page, party: IParty): Promise<void> {
     for( const val of Object.values(["Sí", "No", "Sí", "No"])) {
         await addNewPartForm.transparencySection.belongsToIndigenousGroupRadioGroup.chooseOption( val );
     }
-    await addNewPartForm.addPartyButton.click();
+    if( kind === 'Actor' ) {
+        await addNewPartForm.addPartyButton.click();
+    } else if (kind === 'Representative') {
+        await addNewPartForm.addRepresentativeButton.click();
+    }
+    
 }
