@@ -23,19 +23,21 @@ export class Multiselect {
 );
     }
 
-    public findOptionByText(text: string): Locator {
-        return this.page.getByRole('option', { name: text, exact: true })
-            .or(this.page.getByRole('button', { name: text, exact: true }));
+    public findOptionByText(text: string, exact: boolean = true): Locator {
+        return this.page.getByRole('option', { name: text, exact: exact })
+            .or(this.page.getByRole('button', { name: text, exact: exact }));
     }
+
+
 
     /**
      * Selects an option from the multiselect dropdown by exact text match.
      * @param text - The exact text of the option to select (case-sensitive)
      * @returns A promise that resolves when the option has been clicked
      */
-    public async pickOption(text: string): Promise<void> {
+    public async pickOption(text: string, exact: boolean = true): Promise<void> {
         await this.button.click();
-        await this.findOptionByText(text).click();
+        await this.findOptionByText(text, exact).click();
     }
 }
 

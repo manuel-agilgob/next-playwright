@@ -4,12 +4,10 @@ import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
 import { GeneralInformationAboutExpedientForm } from '../../ui/forms/GeneralInformationAboutExpedientForm';
 import { buildExpedient } from '../../data-builders/expedients/expedient-number-validation';  
-
-import { submitLoginAction } from '@actions/submitLogin.action';
-import { assertLoginSuccess} from '@assertions/login.assert';
 import { assertExpedientGeneralInformationIsCorrect } from '@assertions/createExpedientForm.assert';
 import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
-import { AddNewPartForm } from '@ui/forms/AddNewPartForm';
+import { IParty } from '@contracts/IParty.type';
+import { fillPartyForm } from '@actions/createParty.action';
 
 test.describe('Create expedient and parties', () => {
 
@@ -58,8 +56,7 @@ test.describe('Create expedient and parties', () => {
         const createNewExpedientPage = new CreateNewExpedientPage(page);
         await createNewExpedientPage.addMainPartyButton.click();
 
-        const parties = [
-            {
+        const principalParty : IParty =  {
             "type" : "Actor",
             "names" : "José Manuel",
             "paternalLastName" : "Pérez",
@@ -70,28 +67,47 @@ test.describe('Create expedient and parties', () => {
             "regime" : "Persona Física",
             "alias" : "Pepe",
             "age" : 36,
-            "gender" : "Masculino"
-            }
-        ]
+            "gender" : "Masculino",
+            "email" : "mannedigra@live.com.mx",
+            "phone" : "5551234567",
+            "address" : "Calle Falsa 123, Ciudad de México",
+            "canReadAndWrite" : "Sí",
+            "speaksSpanish" : "Sí",
+            "gradeOfStudies" : "Licenciatura",
+            "civilStatus" : "Soltero(a)",
+            "nationality" : "Mexicana",
+            "occupation" : "Ingeniero en pruebas"
+        };
+        
+        const secondaryParty : IParty = {
+            "type" : "Abogado patrono del actor",
+            "names" : "Wout",
+            "paternalLastName" : "Van Aert",
+            "maternalLastName" : "Perez",
+            "dateOfBirth" : "1992-05-15",
+            "sex" : "Masculino",
+            "classification" : "Pública",
+            "regime" : "Persona Física",
+            "alias" : "Pepe",
+            "age" : 34,
+            "gender" : "Masculino",
+            "email" : "wout@live.com.mx",
+            "phone" : "5551234567",
+            "address" : "Calle Falsa 123, Ciudad de México",
+            "canReadAndWrite" : "Sí",
+            "speaksSpanish" : "Sí",
+            "gradeOfStudies" : "Licenciatura",
+            "civilStatus" : "Soltero(a)",
+            "nationality" : "Mexicana",
+            "occupation" : "Ciclista profesional"
+        };
 
-        for( const party of parties) {
-            const addNewPartForm = new AddNewPartForm(page);
-            
-            // await addNewPartForm.personalSection.typeMultiselect.pickOption(party.type);
-            // await addNewPartForm.personalSection.nameInput.fill(party.names);
-            // await addNewPartForm.personalSection.paternalLastNameInput.fill(party.paternalLastName);
-            // await addNewPartForm.personalSection.maternalLastNameInput.fill(party.maternalLastName);
-           
-            await addNewPartForm.personalSection.dateOfBirthInput.fill(party.dateOfBirth)
-            
-            // await addNewPartForm.personalSection.sexMultiselect.pickOption(party.sex);
-            // await addNewPartForm.personalSection.clasificationMultiselect.pickOption(party.classification);
-            // await addNewPartForm.personalSection.regimeMultiselect.pickOption(party.regime);
-            // await addNewPartForm.personalSection.aliasInput.fill(party.alias);
-            // await addNewPartForm.personalSection.ageInput.fill(party.age.toString());
-            // await addNewPartForm.personalSection.genderMultiselect.pickOption(party.gender);
-        }
-
+        await fillPartyForm(page, principalParty);
+        const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(principalParty);
+        await principalPartyCard.addLegalRepresentativeButton.click();
+        await fillPartyForm(page, secondaryParty);
+        
+        
 
     });
 });

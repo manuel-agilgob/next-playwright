@@ -15,6 +15,10 @@ export class AddNewPartForm {
         this.transparencySection = new TransparencyAndLegalInformationSection(page);
         this.personalSection = new PersonalSection(page);
     }
+
+    get addPartyButton(): Locator {
+        return this.page.getByRole('button', { name: 'Agregar Parte' });
+    }
 }
 
 
@@ -87,15 +91,15 @@ class ContactSection {
     }
 
     get emailInput(): Locator {
-        return this.page.getByLabel('Correo electrónico');
+        return this.page.getByPlaceholder('correo@ejemplo.com');
     }
 
     get phoneNumberInput(): Locator {
-        return this.page.getByLabel('Teléfono');
+        return this.page.getByPlaceholder('10 dígitos');
     }
 
     get addressInput(): Locator {
-        return this.page.getByLabel('Domicilio / residencia');
+        return this.page.getByPlaceholder('Dirección completa');
     }
 }
 
@@ -123,11 +127,15 @@ class TransparencyAndLegalInformationSection {
     }
 
     get canReadAndWriteMultiselect(): Multiselect {
-        return this.canReadAndWriteMultiselect;
+        return new Multiselect(this.page, '¿Puede Leer y Escribir? *');
     }
 
     get gradeOfStudiesMultiselect(): Multiselect {
         return new Multiselect(this.page, 'Grado de Estudios');
+    }
+
+    get occupationInput(): Locator {
+        return this.page.getByPlaceholder('Ocupación o profesión');
     }
 
     // get belongsToIndigenousGroupRadio(): RadioGroup {
