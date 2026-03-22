@@ -2,9 +2,9 @@ import { test } from '@playwright/test';
 
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
-import { GeneralInformationAboutExpedientForm } from '../../ui/forms/GeneralInformationAboutExpedientForm';
-import { buildExpedient } from '../../data-builders/expedients/expedient-number-validation';  
-import { assertExpedientGeneralInformationIsCorrect } from '@assertions/createExpedientForm.assert';
+import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
+import { buildExpedient } from '@data-builders/expedients/expedient-number-validation';  
+import { assertExpedientGeneralInformationIsCorrect, assertSummaryCardInformationIsCorrect } from '@assertions/createExpedientForm.assert';
 import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
 import { IParty } from '@contracts/IParty.type';
 import { fillPartyForm } from '@actions/createParty.action';
@@ -105,10 +105,20 @@ test.describe('Create expedient and parties', () => {
         await principalPartyCard.addLegalRepresentativeButton.click();
         await fillPartyForm(page, actorRepresentative, 'Representative');
 
-        await principalPartyCard.addLegalRepresentativeButton.click();
-        await fillPartyForm(page, actorSecondRepresentative, 'Representative');
-
+        // await principalPartyCard.addLegalRepresentativeButton.click();
+        // await fillPartyForm(page, actorSecondRepresentative, 'Representative');
         await expedientForm.nextButton.click();
+        await page.pause();
+        assertSummaryCardInformationIsCorrect(page, {
+            totalParties: 1,
+            actors: 1,
+            defendants: 0,
+            lawyers: 0
+        });
+        
+        await createNewExpedientPage.saveAndActivateButton.click();
+
+
         
 
     });

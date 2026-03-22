@@ -25,7 +25,8 @@
       "@actions/*": ["src/actions/*"],
       "@assertions/*": ["src/assertions/*"],
       "@fixtures/*": ["src/fixtures/*"],
-      "@contracts/*": ["src/contracts/*"]
+      "@contracts/*": ["src/contracts/*"],
+      "@data-builders/*": ["src/data-builders/*"]
     }
   },
   "include": ["src/**/*"],

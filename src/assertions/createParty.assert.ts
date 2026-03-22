@@ -8,3 +8,7 @@ export async function assertButtonCreateIsEnabledWhenDataIsFilled(page: Page): P
         throw new Error('The "Agregar Parte" button should be enabled when all required data is filled.');
     }
 }
+
+// export async function assertQuantityOfPartiesIsCorrect(page: Page, expectedQuantity: number): Promise<void> {
+
+// }
