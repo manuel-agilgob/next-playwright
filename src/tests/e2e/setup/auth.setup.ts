@@ -16,5 +16,6 @@ setup('authenticate', async ({ page, baseURL }) => {
     await submitLoginAction(page, email, password);
     await assertLoginSuccess(page);
     await page.context().storageState({ path: process.env.STORAGE_STATE_PATH || '.tmp/auth.json' });
+    console.log('Authentication successful, storage state saved.');
 });
 

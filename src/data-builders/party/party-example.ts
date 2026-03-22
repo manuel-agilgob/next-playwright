@@ -1,33 +1,41 @@
-import { Party } from '../party.interface';
+import { randomInt } from 'node:crypto';
+import { IParty } from '@contracts/IParty.type';
+import { faker } from '@faker-js/faker';
 
-export function buildPartyExample(overrides?: Partial<Party>): Party {
-    const defaultParty: Party = {
+function pickRandomOption(options: string[]): string {
+    const randomIndex = randomInt(0, options.length);
+    return options[randomIndex];
+}
+
+// TODO completar los campos con todas las opciones de la aplicacion
+export function buildPartyExample(overrides?: Partial<IParty>): IParty {
+    const defaultParty: IParty = {
         // Personal Information
-        partyType: 'Actor',
-        names: 'Fer Carlos',
-        paternalSurname: 'García',
-        maternalSurname: 'López',
-        birthDate: new Date('1985-05-15'),
-        sex: 'Masculino',
-        clasification: 'Privada',
+        type: 'Actor',
+        names: faker.person.firstName(),
+        paternalLastName: faker.person.lastName(),
+        maternalLastName: faker.person.lastName(),
+        dateOfBirth: faker.date.birthdate({ min: 18, max: 65, mode: 'age' }).toDateString(),
+        sex: pickRandomOption(['Masculino', 'Femenino']),
+        classification: 'Privada',
         alias: 'El Fercho',
         age: 41,
-        partyRegime: 'Persona Física',
-        gender: 'Masculino',
+        regime: 'Persona Física',
+        gender: pickRandomOption(['Masculino', 'Femenino']),
 
         // Contact Information
-        email: 'fer.carlos@example.com',
-        phoneNumber: '5512345678',
-        address: 'Calle Reforma 123, Col. Centro, Ciudad de México, CP 06000',
+        email: faker.internet.email(),
+        phone: faker.phone.number({style: 'national'}),
+        address: faker.location.streetAddress() + ', ' + faker.location.city() + ', ' + faker.location.state() + ', CP ' + faker.location.zipCode(),
 
         // Transparency and legal information
-        canReadAndWrite: true,
-        gradeOfStudies: 'Licenciatura',
+        canReadAndWrite: randomInt(0, 2) === 1 ? 'Sí' : 'No',
+        gradeOfStudies: pickRandomOption(['Licenciatura', 'Maestría', 'Doctorado']),
         nationality: 'Mexicana',
-        speakesSpanish: true,
-        civilStatus: 'Casado(a)',
-        occupation: 'Ingeniero Civil',
-        belongsToIndigenousGroup: false
+        speaksSpanish: randomInt(0, 2) === 1 ? 'Sí' : 'No',
+        civilStatus: pickRandomOption(['Casado(a)']),
+        occupation: faker.person.jobTitle(),
+        belongsToIndigenousGroup: randomInt(0, 2) === 1 ? 'Sí' : 'No',
     };
 
     return {

@@ -48,7 +48,7 @@ test.describe('Create expedient and parties', () => {
         await expedientForm.kindExpedientMultiselect.pickOption(expedient.kindExpedient);
         await expedientForm.kindJudgementMultiselect.pickOption(expedient.kindJudgement);
         await expedientForm.mainActionMultiselect.pickOption(expedient.mainAction);
-
+        await page.screenshot({ path: `.tmp/screenshot/expedient_form_filled.png` });
         await expedientForm.nextButton.click();
 
         await assertExpedientGeneralInformationIsCorrect(page, expedient);
@@ -77,36 +77,38 @@ test.describe('Create expedient and parties', () => {
             "civilStatus" : "Soltero(a)",
             "nationality" : "Mexicana",
             "occupation" : "Ingeniero en pruebas"
-        };
+            } as IParty;
         
-        const secondaryParty : IParty = {
+        const actorRepresentative : IParty = {...principalParty, ...{
+            "email" : "woutVanAert@jumbovisma.com",
             "type" : "Abogado patrono del actor",
             "names" : "Wout",
             "paternalLastName" : "Van Aert",
-            "maternalLastName" : "Perez",
-            "dateOfBirth" : "1992-05-15",
-            "sex" : "Masculino",
-            "classification" : "Pública",
-            "regime" : "Persona Física",
-            "alias" : "Pepe",
             "age" : 34,
-            "gender" : "Masculino",
-            "email" : "wout@live.com.mx",
-            "phone" : "5551234567",
-            "address" : "Calle Falsa 123, Ciudad de México",
-            "canReadAndWrite" : "Sí",
-            "speaksSpanish" : "Sí",
-            "gradeOfStudies" : "Licenciatura",
-            "civilStatus" : "Soltero(a)",
-            "nationality" : "Mexicana",
             "occupation" : "Ciclista profesional"
-        };
+                    }
+            } as IParty;
+
+        const actorSecondRepresentative : IParty = {...principalParty, ...{
+            "email" : "tadejPogacar@uaeteam.com",
+            "type" : "Abogado patrono del actor",
+            "names" : "Tadej",
+            "paternalLastName" : "Pogacar",
+            "age" : 34,
+            "occupation" : "Ciclista profesional"
+                    }
+            } as IParty;
 
         await fillPartyForm(page, principalParty);
         const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(principalParty);
+
         await principalPartyCard.addLegalRepresentativeButton.click();
-        await fillPartyForm(page, secondaryParty, 'Representative');
-        
+        await fillPartyForm(page, actorRepresentative, 'Representative');
+
+        await principalPartyCard.addLegalRepresentativeButton.click();
+        await fillPartyForm(page, actorSecondRepresentative, 'Representative');
+
+        await expedientForm.nextButton.click();
         
 
     });

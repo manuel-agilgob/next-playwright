@@ -19,4 +19,5 @@ export interface IParty {
   civilStatus: string;
   nationality: string;
   occupation: string;
+  belongsToIndigenousGroup?: string;
 }

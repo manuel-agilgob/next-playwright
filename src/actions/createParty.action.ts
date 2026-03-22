@@ -1,9 +1,10 @@
 
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 import { AddNewPartForm } from '@ui/forms/AddNewPartForm';
 import { IParty } from '@contracts/IParty.type';
 
 export async function fillPartyForm(page: Page, party: IParty, kind='Actor'): Promise<void> {
+    console.log(`Starting the form filling for ${party.names} with email ${party.email}, kind (${kind})`);
     const addNewPartForm = new AddNewPartForm(page);
     // Personal Data
     await addNewPartForm.personalSection.typeMultiselect.pickOption(party.type, false);
@@ -35,9 +36,15 @@ export async function fillPartyForm(page: Page, party: IParty, kind='Actor'): Pr
         await addNewPartForm.transparencySection.belongsToIndigenousGroupRadioGroup.chooseOption( val );
     }
     if( kind === 'Actor' ) {
+        await expect(addNewPartForm.addPartyButton).toBeVisible();
+        await expect(addNewPartForm.addPartyButton).toBeEnabled();
         await addNewPartForm.addPartyButton.click();
     } else if (kind === 'Representative') {
+        await expect(addNewPartForm.addRepresentativeButton).toBeVisible();
+        await expect(addNewPartForm.addRepresentativeButton).toBeEnabled();
         await addNewPartForm.addRepresentativeButton.click();
     }
-    
+    console.log(`Filled the form for ${party.names} with email ${party.email}, kind (${kind})`);
+    await page.screenshot({ path: `.tmp/screenshot/${party.names}_filled_form.png` });
+
 }

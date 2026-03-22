@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "''' src/ ├── core/                       # Infraestructura │   ├── browser/ │   │   ├── BrowserFactory.ts │   │   └── TestContext.ts │   ├── config/ │   └── hooks/ │ ├── domain/                     # Dominio puro (sin UI) │   ├── user/ │   ├── expediente/ │   └── enums/ │ ├── ui/                         # UI = solo representación │   ├── pages/ │   │   └── LoginPage.ts │   │ │   ├── components/ │   │   ├── forms/ │   │   │   └── LoginForm.ts │   │   ├── buttons/ │   │   │   └── SubmitButton.ts │   │   └── tables/ │   │ │   └── locators/               # Opcional pero recomendado │       └── login.locators.ts │ ├── actions/                    # Casos de uso (intención) │   ├── auth/ │   │   └── submitLogin.action.ts │   └── expediente/ │ ├── assertions/                 # Validaciones │   ├── auth/ │   │   └── login.assert.ts │   └── common/ │ ├── fixtures/                   # Datos de prueba │   ├── users.fixture.ts │   └── expediente.fixture.ts │ ├── tests/                      # Tests delgados │   ├── smoke/ │   ├── regression/ │   └── e2e/ │ ├── contracts/                  # 👈 clave para agentes │   └── ActionContract.ts │ └── index.ts '''",
   "main": "dist/index.js",
- 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/manuel-agilgob/next-playwright.git"
@@ -26,9 +25,11 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "dotenv": "^17.2.4"
+    "@faker-js/faker": "^10.3.0",
+    "dotenv": "^17.2.4",
+    "faker": "^6.6.6"
   },
-   "scripts": {
+  "scripts": {
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
@@ -43,14 +44,9 @@
     "lint:eslint": "eslint .",
     "lint:files": "ls-lint",
     "lint:fix": "eslint . --fix",
-
-
-
     "encrypt:env": "gpg --symmetric --cipher-algo AES256 --output .env.local.gpg .env.local",
     "decrypt:env": "gpg --decrypt --output .env.local .env.local.gpg",
-
-    "create-expedient:fun" : "npx playwright test src/tests/e2e/create-expedient-from-functionary.spec.ts --headed",
+    "create-expedient:fun": "npx playwright test src/tests/e2e/create-expedient-from-functionary.spec.ts --headed",
     "count:ts": "find . -type f -name \"*.ts\" -not -path \"*/node_modules/*\" -exec cat {} + | wc -l"
   }
- 
 }
