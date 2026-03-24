@@ -62,10 +62,3 @@ export function canMoveToReview(current: ExpedientStatus): boolean {
 ### 5) Integración desde `actions/`
 `actions/` usa estas reglas antes de interactuar con formularios o páginas.
 
-## Checklist rápido al crear un archivo de dominio
-
-- [ ] ¿Está dentro del subdominio correcto (`user`, `expediente`, etc.)?
-- [ ] ¿No depende de Playwright o UI?
-- [ ] ¿El nombre es explícito y en PascalCase?
-- [ ] ¿La lógica es pura y testeable?
-- [ ] ¿Representa una regla de negocio real?

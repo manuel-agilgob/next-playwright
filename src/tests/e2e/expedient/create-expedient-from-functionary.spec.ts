@@ -2,8 +2,8 @@ import { test } from '@playwright/test';
 
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
-import { GeneralInformationAboutExpedientForm } from '../../ui/forms/GeneralInformationAboutExpedientForm';
-import { buildExpedient } from '../../data-builders/expedients/expedient-number-validation';  
+import { GeneralInformationAboutExpedientForm } from '../../../ui/forms/GeneralInformationAboutExpedientForm';
+import { buildExpedient } from '../../../data-builders/expedients/expedient-number-validation';  
 import { assertExpedientGeneralInformationIsCorrect } from '@assertions/createExpedientForm.assert';
 
 import { submitLoginAction } from '@actions/submitLogin.action';

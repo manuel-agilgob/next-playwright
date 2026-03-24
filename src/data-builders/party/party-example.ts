@@ -7,7 +7,7 @@ function pickRandomOption(options: string[]): string {
     return options[randomIndex];
 }
 
-// TODO completar los campos con todas las opciones de la aplicacion
+
 export function buildPartyExample(overrides?: Partial<IParty>): IParty {
     const defaultParty: IParty = {
         // Personal Information

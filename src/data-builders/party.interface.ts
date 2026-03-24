@@ -15,7 +15,7 @@ export interface Party {
     alias : string;
     age: number;
     partyRegime: 'Persona Física' | 'Persona Moral';
-    gender : 'Masculino' | 'Femenino' ; // TODO Agregar más opciones
+    gender : 'Masculino' | 'Femenino' ; 
 
     // Contact Information
     email: string;

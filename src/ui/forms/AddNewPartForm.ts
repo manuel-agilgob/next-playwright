@@ -142,7 +142,4 @@ class TransparencyAndLegalInformationSection {
         return this.page.getByPlaceholder('Ocupación o profesión');
     }
 
-    // get belongsToIndigenousGroupRadio(): RadioGroup {
-    //     // TODO Crear el componente de RadioGroup
-    // }
 }
