@@ -8,9 +8,42 @@ import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
 export async function assertExpedientNumberIsValid(page : Page, textContent : string) {
     const expedientForm = new GeneralInformationAboutExpedientForm(page);
     expect( await expedientForm.expedientNumberInput
-        .inputValue()).toContain( textContent )
+        .inputValue()).toContain( textContent );
+    
+    expect( expedientForm.expedientNumberValidIcon).toBeVisible();
+    expect( expedientForm.expedientNumberInvalidIcon).not.toBeVisible();
+
+    expect( expedientForm.expedientNumberGreenIcon).toBeVisible();
+    expect( expedientForm.expedientNumberRedIcon).not.toBeVisible();
     
 }
+
+export async function assertExpedientNumberIsInvalid(page : Page, textContent : string) {
+    const expedientForm = new GeneralInformationAboutExpedientForm(page);
+    expect( await expedientForm.expedientNumberInput
+        .inputValue()).not.toContain( textContent );
+    
+    expect( expedientForm.expedientNumberValidIcon).not.toBeVisible();
+    expect( expedientForm.expedientNumberInvalidIcon).toBeVisible();
+
+    expect( expedientForm.expedientNumberGreenIcon).not.toBeVisible();
+    expect( expedientForm.expedientNumberRedIcon).toBeVisible();
+}
+
+export async function assertExpedientNumberIsDuplicate(page : Page, textContent : string) {
+    const expedientForm = new GeneralInformationAboutExpedientForm(page);
+    expect( await expedientForm.expedientNumberInput
+        .inputValue()).toContain( textContent );
+    expect( expedientForm.expedientDuplicatedAlert).toBeVisible();
+
+    expect( expedientForm.expedientNumberValidIcon).not.toBeVisible();
+    expect( expedientForm.expedientNumberInvalidIcon).toBeVisible();
+
+    expect( expedientForm.expedientNumberGreenIcon).not.toBeVisible();
+    expect( expedientForm.expedientNumberRedIcon).toBeVisible();
+
+};
+
 
 export async function assertExpNumberNotContainsInvalidChars(page : Page, invalidChars : string) {
     const expedientForm = new GeneralInformationAboutExpedientForm(page);

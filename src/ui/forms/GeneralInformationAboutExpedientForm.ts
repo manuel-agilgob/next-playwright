@@ -20,19 +20,19 @@ export class GeneralInformationAboutExpedientForm {
         this.mainActionMultiselect = new Multiselect(page, 'Acción Principal');
     }
 
-    public get title(): Locator {
+    get title(): Locator {
         return this.page.getByText('Información General del Expediente' );
     }
 
-    public get container(): Locator {
+    get container(): Locator {
         return this.title.locator('..').locator('..');
     }
 
-    public get expedientNumberLabel(): Locator {
+    get expedientNumberLabel(): Locator {
         return this.container.getByText('Número de Expediente', { exact: false });
     }   
 
-    public get expedientNumberInput(): Locator {
+    get expedientNumberInput(): Locator {
         return this.page.locator('#expedientNumber');
     }
 
@@ -62,7 +62,7 @@ export class GeneralInformationAboutExpedientForm {
     //         .locator('..');
     // }
 
-    public get nextButton(): Locator {
+    get nextButton(): Locator {
         return this.page.getByRole('button', { name: 'Siguiente' });
     }   
 
@@ -74,5 +74,30 @@ export class GeneralInformationAboutExpedientForm {
     public optionByText(text: string): Locator {
         return this.optionsList().getByText(text, { exact: true });
     }
+
+    // Icon located inside expedient number input
+    get expedientNumberGreenIcon(): Locator {
+        return this.page.locator('.lucide.lucide-circle-check.h-4');
+    }
+
+    get expedientNumberRedIcon(): Locator {
+        return this.page.locator('.lucide.lucide-circle-alert.h-4');
+    }
+
+    get expedientDuplicatedAlert(): Locator {
+        return this.page.getByText('Este número de expediente ya');
+    }
+    
+    // Icon located in header of form, next to title
+    get expedientNumberInvalidIcon(): Locator {
+        return this.page.locator('.lucide.lucide-circle-alert').first();
+    }
+
+    get expedientNumberValidIcon(): Locator {
+        return this.page.locator('.lucide.lucide-circle-check').first();
+    }
+
+
+
 
 }
