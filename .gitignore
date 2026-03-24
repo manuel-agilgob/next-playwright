@@ -9,6 +9,7 @@ test-results/
 .DS_Store
 
 # Ingore environment variable files BUT track gpg ones
-.env.local
-.env.sandbox
-.env.production
+# .env.local
+# .env.sandbox
+# .env.production
+.env.keys
