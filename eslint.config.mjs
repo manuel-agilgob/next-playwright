@@ -14,6 +14,9 @@ export default [
         ecmaVersion: 'latest',
         sourceType: 'module',
         project: './tsconfig.json'
+      },
+      globals: {
+        ...globals.node  // ← Agrega esta línea
       }
     },
     plugins: {
@@ -31,11 +34,7 @@ export default [
             match: true
           },
           format: ['PascalCase'],
-          suffix: ['Page'],
-          custom: {
-            regex: '^[A-Z][a-zA-Z]*Page$',
-            match: true
-          }
+          suffix: ['Page']
         },
         // Component classes must end with "Component"
         {
@@ -45,11 +44,7 @@ export default [
             match: true
           },
           format: ['PascalCase'],
-          suffix: ['Component'],
-          custom: {
-            regex: '^[A-Z][a-zA-Z]*Component$',
-            match: true
-          }
+          suffix: ['Component']
         },
         // Form classes must end with "Form"
         {
@@ -59,11 +54,7 @@ export default [
             match: true
           },
           format: ['PascalCase'],
-          suffix: ['Form'],
-          custom: {
-            regex: '^[A-Z][a-zA-Z]*Form$',
-            match: true
-          }
+          suffix: ['Form']
         },
         // Button classes must end with "Button"
         {
@@ -156,6 +147,6 @@ export default [
     }
   },
   {
-    ignores: ['dist/**', 'node_modules/**', 'playwright-report/**', 'test-results/**']
+    ignores: ['dist/**', 'node_modules/**', 'playwright-report/**', 'test-results/**', '.tmp/**']
   }
 ];

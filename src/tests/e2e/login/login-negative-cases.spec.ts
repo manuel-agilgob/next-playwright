@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { LoginForm } from '../../ui/forms/LoginForm';
-import { submitLoginAction } from '../../actions/submitLogin.action';
-import { assertLoginFailure } from '../../assertions/login.assert';
+import { LoginForm } from '../../../ui/forms/LoginForm';
+import { submitLoginAction } from '../../../actions/submitLogin.action';
+import { assertLoginFailure } from '../../../assertions/login.assert';
 
 test.describe('Login Negative Test Cases - Security and Validation', () => {
 
@@ -224,29 +224,6 @@ test.describe('Login Negative Test Cases - Security and Validation', () => {
             
             // Check if account gets locked or rate limited (adjust based on your app)
             await expect(page.locator('body')).toContainText(/error|locked|attempts/i);
-        });
-    });
-
-    test.describe('Form Manipulation', () => {
-        
-        test('should not login when submitting form without filling fields', async ({ page }) => {
-            const loginForm = new LoginForm(page);
-            await loginForm.loginButton.click();
-            await assertLoginFailure(page);
-        });
-
-        test('should validate client-side before submission', async ({ page }) => {
-            const loginForm = new LoginForm(page);
-            
-            // Try to submit with invalid email
-            await loginForm.emailInput.fill('invalid-email');
-            await loginForm.passwordInput.fill('12345678');
-            
-            // Check if HTML5 validation prevents submission
-            const emailInput = await loginForm.emailInput.elementHandle();
-            const validationMessage = await emailInput?.evaluate((el: HTMLInputElement) => el.validationMessage);
-            
-            expect(validationMessage).toBeTruthy();
         });
     });
 

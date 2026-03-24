@@ -89,16 +89,6 @@ test.describe('Create expedient and parties', () => {
                     }
             } as IParty;
 
-        const actorSecondRepresentative : IParty = {...principalParty, ...{
-            "email" : "tadejPogacar@uaeteam.com",
-            "type" : "Abogado patrono del actor",
-            "names" : "Tadej",
-            "paternalLastName" : "Pogacar",
-            "age" : 34,
-            "occupation" : "Ciclista profesional"
-                    }
-            } as IParty;
-
         await fillPartyForm(page, principalParty);
         const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(principalParty);
 

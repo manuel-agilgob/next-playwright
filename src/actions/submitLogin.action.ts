@@ -1,5 +1,5 @@
 import { LoginForm } from "@ui/forms/LoginForm";
-import { Page, Locator } from '@playwright/test';
+import { Page } from '@playwright/test';
 
 export async function submitLoginAction(page:Page , email: string, password: string) {
     const loginForm = new LoginForm(page);

@@ -3,12 +3,9 @@ import { test } from '@playwright/test';
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
 import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
-import { buildExpedient } from '@data-builders/expedients/expedient-number-validation';  
 import { assertExpedientNumberIsValid, assertExpedientNumberIsInvalid, 
     assertExpedientNumberIsDuplicate, assertExpedientNumberShouldNotAcceptFormat} from '@assertions/createExpedientForm.assert';
-import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
-import { IParty } from '@contracts/IParty.type';
-import { fillPartyForm } from '@actions/createParty.action';
+
 
 test.describe('Expedient form', () => {
 
@@ -95,7 +92,7 @@ test.describe('Expedient form', () => {
         test(`Expedient number should not accept duplicate number: ${expedient}`, async ({ page }) => {
             const expedientForm = new GeneralInformationAboutExpedientForm(page);
             console.log('Testing with expedient number: ', expedient);
-            
+
             await expedientForm.expedientNumberInput.fill(expedient);
             await expedientForm.expedientNumberInput.press('Enter');
 

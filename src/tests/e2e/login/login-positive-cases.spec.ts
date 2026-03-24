@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 
-import { submitLoginAction } from '../../actions/submitLogin.action';
-import { assertLoginSuccess } from '../../assertions/login.assert';
+import { submitLoginAction } from '../../../actions/submitLogin.action';
+import { assertLoginSuccess } from '../../../assertions/login.assert';
 
 
 test.describe('Login Negative Test Cases - Security and Validation', () => {

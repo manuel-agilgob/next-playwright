@@ -1,5 +1,5 @@
 
-class CalendarComponent {
+export class CalendarComponent {
     // private readonly page: Page;
     public selector: string;
     public static DATE_FORMAT: string = 'YYYY-MM-DD';
@@ -13,10 +13,10 @@ class CalendarComponent {
         return dateRegex.test(dateString);
     }
 
-    toISOString( date:DateObject ): string {
-        const { year, month, day } = date;
-        return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    }
+    // toISOString( date:DateObject ): string {
+    //     const { year, month, day } = date;
+    //     return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    // }
 
 }
 

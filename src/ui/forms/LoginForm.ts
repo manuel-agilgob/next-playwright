@@ -29,17 +29,16 @@ export class LoginForm {
         return this.page.getByText('Email o contraseña incorrectos')
     }
 
-    // TODO. Add selectors for every error message
     public get errorMessageInvalidEmailFormat(): Locator {
-        // return this.page.getByText('Email o contraseña incorrectos')
+        return this.page.getByText('Email o contraseña incorrectos')
     }
 
     public get errorMessageEmptyPassword(): Locator {
-        
+        return this.page.getByText('La contraseña es requerida')
     }
 
     public get errorMessageEmptyEmail(): Locator {
-        
+        return this.page.getByText('Por favor ingresa un correo')
     }
 
 
