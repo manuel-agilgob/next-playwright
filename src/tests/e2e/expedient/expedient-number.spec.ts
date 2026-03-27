@@ -5,6 +5,7 @@ import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
 import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
 import { assertExpedientNumberIsValid, assertExpedientNumberIsInvalid, 
     assertExpedientNumberIsDuplicate, assertExpedientNumberShouldNotAcceptFormat} from '@assertions/createExpedientForm.assert';
+import { ExpedientsSubMenu } from '@ui/components/ExpedientsSubMenu';
 
 
 test.describe('Expedient form', () => {
@@ -53,6 +54,10 @@ test.describe('Expedient form', () => {
         const navigationBar = new NavigationBar(page);
         await navigationBar.expedientsTab.click();
 
+        const expSubmenu = new ExpedientsSubMenu(page);
+        await expSubmenu.myExpedientsOption.click();
+
+        // await page.pause();
         const judicialExpedientsPage = new JudicialExpedientsPage(page);
         await judicialExpedientsPage.newExpedientButton.click();
     });
@@ -101,4 +106,19 @@ test.describe('Expedient form', () => {
             // await page.pause();
         })
     }
+
+    test('Expedient number fills automatically using recomendation button', async ({ page }) => {
+        // Arrange
+        const form = new GeneralInformationAboutExpedientForm(page);
+
+        // Action
+        // await judicialExpedientsPage.newExpedientButton.click();
+        await form.nextExpedientButton.click();
+        const expedient = await form.expedientNumberInput.textContent();
+
+        // Assertion
+        assertExpedientNumberIsValid(page, expedient!);
+
+
+    })
 });

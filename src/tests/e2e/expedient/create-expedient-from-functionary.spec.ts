@@ -36,14 +36,15 @@ test.describe('Create expedient from functionary', () => {
        
         // await assertLoginSuccess(page);
         const navigationBar = new NavigationBar(page);
-        await navigationBar.expedientsTab.click();
+        
+        await navigationBar.expedientsTab.click({timeout: 5000});
 
         const judicialExpedientsPage = new JudicialExpedientsPage(page);
         await judicialExpedientsPage.newExpedientButton.click();
 
         const expedientForm = new GeneralInformationAboutExpedientForm(page);
 
-        await expedientForm.expedientNumberInput.fill( expedient.expedientNumber );
+        await expedientForm.nextExpedientButton.click();
         await expedientForm.matterMultiselect.pickOption(expedient.matter);
         await expedientForm.legalWayMultiselect.pickOption(expedient.legalWay);
         await expedientForm.kindExpedientMultiselect.pickOption(expedient.kindExpedient);

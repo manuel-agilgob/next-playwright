@@ -8,6 +8,6 @@ export class JudicialExpedientsPage {
     }
     
     public get newExpedientButton(): Locator {
-        return this.page.getByRole('button', { name: 'Nuevo Expediente' });
+        return this.page.getByRole('button', { name: 'Nuevo Expediente' }).first();
     }
 }

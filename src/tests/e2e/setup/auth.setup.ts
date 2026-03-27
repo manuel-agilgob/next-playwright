@@ -10,7 +10,7 @@ setup('authenticate', async ({ page, baseURL }) => {
     const email = process.env.USER_EMAIL || '';
     const password = process.env.USER_PASSWORD || '';
 
-    await page.pause();
+    
     if(!email || !password) {
         throw new Error('USER_EMAIL and USER_PASSWORD must be set in environment variables');
     }
