@@ -1,7 +1,7 @@
 
 import { Page, expect } from '@playwright/test';
 import { AddNewPartForm } from '@ui/forms/AddNewPartForm';
-import { IParty } from '@contracts/IParty.type';
+import { IParty } from '@contracts/IParty.interface';
 
 export async function fillPartyForm(page: Page, party: IParty, kind='Actor'): Promise<void> {
     console.log(`Starting the form filling for ${party.names} with email ${party.email}, kind (${kind})`);

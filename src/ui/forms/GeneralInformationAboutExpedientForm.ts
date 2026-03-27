@@ -36,6 +36,12 @@ export class GeneralInformationAboutExpedientForm {
         return this.page.locator('#expedientNumber');
     }
 
+    get expedientNumberTextbox() : Locator {
+        return this.page.getByText('Número de Expediente', { exact: true })
+            .locator('..')
+            .locator('p.tracking-tight')
+    }
+
     get nextExpedientButton(): Locator {
         return this.page.getByText('Siguiente sugerido: ');
     }

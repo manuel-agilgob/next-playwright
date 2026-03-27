@@ -1,4 +1,4 @@
-import { IParty } from "@contracts/IParty.type";
+import { IParty } from "@contracts/IParty.interface";
 import { Locator, Page } from "@playwright/test";
 
 

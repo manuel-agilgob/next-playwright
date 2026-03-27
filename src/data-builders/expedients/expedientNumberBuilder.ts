@@ -1,6 +1,6 @@
-import { Expedient } from '../expedient.interface';
+import { IExpedient } from '../../contracts/IExpedient.interface';
 
-export function buildExpedient( overrides?: Partial<Expedient>): Expedient {
+export function buildExpedient( overrides?: Partial<IExpedient>): IExpedient {
     return {
         expedientNumber: '5/2026',
         matter : 'Familiar',

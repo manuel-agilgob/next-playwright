@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect} from '@playwright/test';
 
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
@@ -6,7 +6,7 @@ import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformati
 import { buildExpedient } from '@data-builders/expedients/expedientNumberBuilder';  
 import { assertExpedientGeneralInformationIsCorrect, assertSummaryCardInformationIsCorrect } from '@assertions/createExpedientForm.assert';
 import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
-import { IParty } from '@contracts/IParty.type';
+import { IParty } from '@contracts/IParty.interface';
 import { fillPartyForm } from '@actions/createParty.action';
 
 test.describe('Create expedient and parties', () => {
@@ -41,8 +41,10 @@ test.describe('Create expedient and parties', () => {
 
         const expedientForm = new GeneralInformationAboutExpedientForm(page);
 
+        await expedientForm.nextExpedientButton.click();
+        expedient.expedientNumber = await expedientForm.expedientNumberInput.textContent() || '';
+        expect(expedient.expedientNumber).not.toBe('');
 
-        await expedientForm.expedientNumberInput.fill( expedient.expedientNumber );
         await expedientForm.matterMultiselect.pickOption(expedient.matter);
         await expedientForm.legalWayMultiselect.pickOption(expedient.legalWay);
         await expedientForm.kindExpedientMultiselect.pickOption(expedient.kindExpedient);
@@ -57,11 +59,11 @@ test.describe('Create expedient and parties', () => {
         await createNewExpedientPage.addMainPartyButton.click();
 
         const principalParty : IParty =  {
-            "type" : "Actor",
+            "partyType" : "Actor",
             "names" : "José Manuel",
-            "paternalLastName" : "Pérez",
-            "maternalLastName" : "López",
-            "dateOfBirth" : "1990-05-15",
+            "paternalSurname" : "Pérez",
+            "maternalSurname" : "López",
+            "birthDate" : "1990-05-15",
             "sex" : "Masculino",
             "classification" : "Pública",
             "regime" : "Persona Física",
@@ -76,24 +78,42 @@ test.describe('Create expedient and parties', () => {
             "gradeOfStudies" : "Licenciatura",
             "civilStatus" : "Soltero(a)",
             "nationality" : "Mexicana",
-            "occupation" : "Ingeniero en pruebas"
+            "occupation" : "Ingeniero en pruebas",
+            "clasification" : "Pública",
+            "partyRegime" : "Persona Física",
+            "phoneNumber" : "5551234567",
+            "belongsToIndigenousGroup" : "No"
             } as IParty;
         
         const actorRepresentative : IParty = {...principalParty, ...{
             "email" : "woutVanAert@jumbovisma.com",
-            "type" : "Abogado patrono del actor",
+            "partyType" : "Abogado patrono del actor",
             "names" : "Wout",
-            "paternalLastName" : "Van Aert",
+            "paternalSurname" : "Van Aert",
             "age" : 34,
             "occupation" : "Ciclista profesional"
                     }
             } as IParty;
+
+        const secondActorRepresentative : IParty = {...principalParty, ...{
+            "email" : "jonasVingengaard@jumbovisma.com",
+            "partyType" : "Abogado patrono del actor",
+            "names" : "Jonas",
+            "paternalSurname" : "Vingegaard",
+            "age" : 32,
+            "occupation" : "Ciclista profesional"
+                    }
+            } as IParty;
+
 
         await fillPartyForm(page, principalParty);
         const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(principalParty);
 
         await principalPartyCard.addLegalRepresentativeButton.click();
         await fillPartyForm(page, actorRepresentative, 'Representative');
+
+        await principalPartyCard.addLegalRepresentativeButton.click();
+        await fillPartyForm(page, secondActorRepresentative, 'Representative');
 
         // await principalPartyCard.addLegalRepresentativeButton.click();
         // await fillPartyForm(page, actorSecondRepresentative, 'Representative');

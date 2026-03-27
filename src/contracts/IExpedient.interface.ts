@@ -1,4 +1,4 @@
-export interface Expedient {
+export interface IExpedient {
     expedientNumber: string;
     matter: string;
     legalWay: string;

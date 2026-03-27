@@ -1,5 +1,5 @@
 import { randomInt } from 'node:crypto';
-import { IParty } from '@contracts/IParty.type';
+import { IParty } from '@contracts/IParty.interface';
 import { faker } from '@faker-js/faker';
 
 function pickRandomOption(options: string[]): string {

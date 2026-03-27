@@ -1,6 +1,6 @@
 import { Page, expect } from '@playwright/test';
 import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
-import { Expedient } from '../data-builders/expedient.interface';
+import { IExpedient } from '../contracts/IExpedient.interface';
 import { ExpedientGeneralInformationSideBar } from '@ui/components/ExpedientGeneralInformationSideBar';
 import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
 
@@ -58,7 +58,7 @@ export async function assertExpedientNumberShouldNotAcceptFormat(page : Page, in
         .inputValue()).not.toContain( invalidFormat )
 }
 
-export async function assertExpedientGeneralInformationIsCorrect(page : Page, expedient : Expedient) {
+export async function assertExpedientGeneralInformationIsCorrect(page : Page, expedient : IExpedient) {
 
         const expedientSideBar = new ExpedientGeneralInformationSideBar(page);
 

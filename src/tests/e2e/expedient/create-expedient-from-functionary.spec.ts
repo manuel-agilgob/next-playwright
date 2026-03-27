@@ -4,28 +4,27 @@ import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
 import { GeneralInformationAboutExpedientForm } from '../../../ui/forms/GeneralInformationAboutExpedientForm';
 import { buildExpedient } from '../../../data-builders/expedients/expedientNumberBuilder';  
-import { assertExpedientGeneralInformationIsCorrect } from '@assertions/createExpedientForm.assert';
-
-import { submitLoginAction } from '@actions/submitLogin.action';
-import { assertLoginSuccess} from '@assertions/login.assert';
+import { assertExpedientGeneralInformationIsCorrect, assertExpedientNumberIsValid } 
+    from '@assertions/createExpedientForm.assert';
+import { IExpedient } from '@contracts/IExpedient.interface';
 
 
 test.describe('Create expedient from functionary', () => {
 
-    const expedient = buildExpedient({expedientNumber: '5/2026'});
+    let expedient = buildExpedient({expedientNumber: '5/2026'});
 
     test.beforeEach(async ({ page }) => {
 
-        await page.goto(process.env.BASE_URL || '/');
-        await page.waitForLoadState('networkidle');
-        const email = process.env.USER_EMAIL || '';
-        const password = process.env.USER_PASSWORD || '';
+        // await page.goto(process.env.BASE_URL || '/');
+        // await page.waitForLoadState('networkidle');
+        // const email = process.env.USER_EMAIL || '';
+        // const password = process.env.USER_PASSWORD || '';
     
-        if(!email || !password) {
-            throw new Error('USER_EMAIL and USER_PASSWORD must be set in environment variables');
-        }
-        await submitLoginAction(page, email, password);
-        await assertLoginSuccess(page);
+        // if(!email || !password) {
+        //     throw new Error('USER_EMAIL and USER_PASSWORD must be set in environment variables');
+        // }
+        // await submitLoginAction(page, email, password);
+        // await assertLoginSuccess(page);
 
         await page.goto('/expedientes');
         // Wait for page to be ready
@@ -42,20 +41,29 @@ test.describe('Create expedient from functionary', () => {
         const judicialExpedientsPage = new JudicialExpedientsPage(page);
         await judicialExpedientsPage.newExpedientButton.click();
 
-        const expedientForm = new GeneralInformationAboutExpedientForm(page);
-
-        await expedientForm.nextExpedientButton.click();
-        await expedientForm.matterMultiselect.pickOption(expedient.matter);
-        await expedientForm.legalWayMultiselect.pickOption(expedient.legalWay);
-        await expedientForm.kindExpedientMultiselect.pickOption(expedient.kindExpedient);
-        await expedientForm.kindJudgementMultiselect.pickOption(expedient.kindJudgement);
-        await expedientForm.mainActionMultiselect.pickOption(expedient.mainAction);
+        expedient = await fillExpedientForm(page, expedient);
+        
+        assertExpedientNumberIsValid(page, expedient.expedientNumber);
     
-
-        await expedientForm.nextButton.click();
-
         await assertExpedientGeneralInformationIsCorrect(page, expedient);
 
 
     });
 });
+
+async function fillExpedientForm(page: any, expedient:IExpedient): Promise<IExpedient> {
+    const expedientForm = new GeneralInformationAboutExpedientForm(page);
+
+    await expedientForm.nextExpedientButton.click();
+    await expedientForm.matterMultiselect.pickOption(expedient.matter);
+    await expedientForm.legalWayMultiselect.pickOption(expedient.legalWay);
+    await expedientForm.kindExpedientMultiselect.pickOption(expedient.kindExpedient);
+    await expedientForm.kindJudgementMultiselect.pickOption(expedient.kindJudgement);
+    await expedientForm.mainActionMultiselect.pickOption(expedient.mainAction);
+    
+    expedient.expedientNumber = (await expedientForm.expedientNumberTextbox.textContent()) || '';
+    console.log('Expedient number obtained from form:', expedient.expedientNumber);
+    await expedientForm.nextButton.click();
+
+    return expedient;
+}
