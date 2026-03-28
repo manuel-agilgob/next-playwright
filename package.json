@@ -23,6 +23,7 @@
     "eslint": "^9.39.2",
     "globals": "^17.3.0",
     "husky": "^9.1.7",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
@@ -48,6 +49,8 @@
     "encrypt:env": "gpg --symmetric --cipher-algo AES256 --output .env.local.gpg .env.local",
     "decrypt:env": "gpg --decrypt --output .env.local .env.local.gpg",
     "create-expedient:fun": "npx playwright test src/tests/e2e/create-expedient-from-functionary.spec.ts --headed",
-    "count:ts": "find . -type f -name \"*.ts\" -not -path \"*/node_modules/*\" -exec cat {} + | wc -l"
+    "count:ts": "find . -type f -name \"*.ts\" -not -path \"*/node_modules/*\" -exec cat {} + | wc -l",
+
+    "test:script" : "npx ts-node -r tsconfig-paths/register src/example.ts"
   }
 }

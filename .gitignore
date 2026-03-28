@@ -13,3 +13,4 @@ test-results/
 # .env.sandbox
 # .env.production
 .env.keys
+src/example.ts
