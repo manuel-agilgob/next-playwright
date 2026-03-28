@@ -1,16 +1,17 @@
-import { test, expect} from '@playwright/test';
+import { test} from '@playwright/test';
 
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
-import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
 import { buildExpedient } from '@data-builders/expedientNumberBuilder';  
-import { assertExpedientGeneralInformationIsCorrect, assertSummaryCardInformationIsCorrect } from '@assertions/createExpedientForm.assert';
+import { assertExpedientGeneralInformationIsCorrect } from '@assertions/createExpedientForm.assert';
 import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
 import { CreateNewExpedientPartsPage } from '@ui/pages/CreateNewExpedientPartsPage';
 import { IParty } from '@contracts/IParty.interface';
 import { fillPartyForm } from '@actions/createParty.action';
 import { fillExpedientForm } from '@actions/createExpedient.action';
 import { buildPartyExample } from '@data-builders/partyBuilder';
+import { submitLoginAction } from '@actions/submitLogin.action';
+import { assertLoginSuccess } from '@assertions/login.assert';
 
 test.describe('Create expedient and parties', () => {
 
@@ -18,16 +19,16 @@ test.describe('Create expedient and parties', () => {
 
     test.beforeEach(async ({ page }) => {
 
-        // await page.goto(process.env.BASE_URL || '/');
-        // await page.waitForLoadState('networkidle');
-        // const email = process.env.USER_EMAIL || '';
-        // const password = process.env.USER_PASSWORD || '';
+        await page.goto(process.env.BASE_URL || '/');
+        await page.waitForLoadState('networkidle');
+        const email = process.env.USER_EMAIL || '';
+        const password = process.env.USER_PASSWORD || '';
     
-        // if(!email || !password) {
-        //     throw new Error('USER_EMAIL and USER_PASSWORD must be set in environment variables');
-        // }
-        // await submitLoginAction(page, email, password);
-        // await assertLoginSuccess(page);
+        if(!email || !password) {
+            throw new Error('USER_EMAIL and USER_PASSWORD must be set in environment variables');
+        }
+        await submitLoginAction(page, email, password);
+        await assertLoginSuccess(page);
 
         await page.goto('/expedientes');
         // Wait for page to be ready
@@ -37,7 +38,6 @@ test.describe('Create expedient and parties', () => {
     test('should create expedient from functionary', async ({ page }) => {
         // await assertLoginSuccess(page);
         const navigationBar = new NavigationBar(page);
-        const expedientForm = new GeneralInformationAboutExpedientForm(page);
         const judicialExpedientsPage = new JudicialExpedientsPage(page);
         const createNewExpedientPage = new CreateNewExpedientPage(page);
         const createPartsPage = new CreateNewExpedientPartsPage(page);
