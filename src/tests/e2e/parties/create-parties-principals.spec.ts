@@ -55,10 +55,9 @@ test.describe('Create expedient and parties', () => {
         const demandado : IParty = buildPartyExample({partyType : "Demandado"});
 
         await fillPartyForm(page, actor);
-        await createPartsPage.addPartButton.click();
-        await page.pause();
-        
+        await createPartsPage.addPartButton.click();        
         await fillPartyForm(page, demandado);
+        await page.pause();
         // const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(actor);
 
         // await principalPartyCard.addLegalRepresentativeButton.click();
