@@ -13,7 +13,7 @@ export const genderTypes = ['Masculino', 'Femenino'] as const;
 
 export const gradeOfStudiesTypes = ['Sin estudios', 'Primaria', 'Secundaria', 'Preparatoria', 'Licenciatura', 'Maestría', 'Doctorado'] as const;
 
-export const nationalityTypes = ['Mexicana', 'Estadounidense', 'Otra'] as const;
+export const nationalityTypes = ['MEXICANA', 'NAMIBIANA'] as const;
 
 export const civilStatusTypes = ['Soltero(a)', 'Casado(a)', 'Divorciado(a)', 'Viudo(a)'] as const;
 
@@ -39,7 +39,7 @@ export interface IPartyPersonal {
   maternalSurname: string;
   birthDate: string;
   sex: Sex;
-  clasification: Classification;
+  classification: Classification;
   alias: string;
   age: number;
   partyRegime: PartyRegime;

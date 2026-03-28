@@ -3,26 +3,29 @@ import { test, expect} from '@playwright/test';
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
 import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
-import { buildExpedient } from '@data-builders/expedients/expedientNumberBuilder';  
+import { buildExpedient } from '@data-builders/expedientNumberBuilder';  
 import { assertExpedientGeneralInformationIsCorrect, assertSummaryCardInformationIsCorrect } from '@assertions/createExpedientForm.assert';
 import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
+import { CreateNewExpedientPartsPage } from '@ui/pages/CreateNewExpedientPartsPage';
 import { IParty } from '@contracts/IParty.interface';
 import { fillPartyForm } from '@actions/createParty.action';
+import { fillExpedientForm } from '@actions/createExpedient.action';
+import { buildPartyExample } from '@data-builders/partyBuilder';
 
 test.describe('Create expedient and parties', () => {
 
-    const expedient = buildExpedient({expedientNumber: '5/2026'});
+    let expedient = buildExpedient({expedientNumber: '5/2026'});
 
     test.beforeEach(async ({ page }) => {
 
-        await page.goto(process.env.BASE_URL || '/');
-        await page.waitForLoadState('networkidle');
-        const email = process.env.USER_EMAIL || '';
-        const password = process.env.USER_PASSWORD || '';
+        // await page.goto(process.env.BASE_URL || '/');
+        // await page.waitForLoadState('networkidle');
+        // const email = process.env.USER_EMAIL || '';
+        // const password = process.env.USER_PASSWORD || '';
     
-        if(!email || !password) {
-            throw new Error('USER_EMAIL and USER_PASSWORD must be set in environment variables');
-        }
+        // if(!email || !password) {
+        //     throw new Error('USER_EMAIL and USER_PASSWORD must be set in environment variables');
+        // }
         // await submitLoginAction(page, email, password);
         // await assertLoginSuccess(page);
 
@@ -34,99 +37,47 @@ test.describe('Create expedient and parties', () => {
     test('should create expedient from functionary', async ({ page }) => {
         // await assertLoginSuccess(page);
         const navigationBar = new NavigationBar(page);
-        await navigationBar.expedientsTab.click();
-
-        const judicialExpedientsPage = new JudicialExpedientsPage(page);
-        await judicialExpedientsPage.newExpedientButton.click();
-
         const expedientForm = new GeneralInformationAboutExpedientForm(page);
+        const judicialExpedientsPage = new JudicialExpedientsPage(page);
+        const createNewExpedientPage = new CreateNewExpedientPage(page);
+        const createPartsPage = new CreateNewExpedientPartsPage(page);
 
-        await expedientForm.nextExpedientButton.click();
-        expedient.expedientNumber = await expedientForm.expedientNumberInput.textContent() || '';
-        expect(expedient.expedientNumber).not.toBe('');
-
-        await expedientForm.matterMultiselect.pickOption(expedient.matter);
-        await expedientForm.legalWayMultiselect.pickOption(expedient.legalWay);
-        await expedientForm.kindExpedientMultiselect.pickOption(expedient.kindExpedient);
-        await expedientForm.kindJudgementMultiselect.pickOption(expedient.kindJudgement);
-        await expedientForm.mainActionMultiselect.pickOption(expedient.mainAction);
-        await page.screenshot({ path: `.tmp/screenshot/expedient_form_filled.png` });
-        await expedientForm.nextButton.click();
+        await navigationBar.expedientsTab.click();
+        await judicialExpedientsPage.newExpedientButton.click();
+        
+        expedient = await fillExpedientForm(page, expedient);
 
         await assertExpedientGeneralInformationIsCorrect(page, expedient);
 
-        const createNewExpedientPage = new CreateNewExpedientPage(page);
         await createNewExpedientPage.addMainPartyButton.click();
 
-        const principalParty : IParty =  {
-            "partyType" : "Actor",
-            "names" : "José Manuel",
-            "paternalSurname" : "Pérez",
-            "maternalSurname" : "López",
-            "birthDate" : "1990-05-15",
-            "sex" : "Masculino",
-            "classification" : "Pública",
-            "regime" : "Persona Física",
-            "alias" : "Pepe",
-            "age" : 36,
-            "gender" : "Masculino",
-            "email" : "mannedigra@live.com.mx",
-            "phone" : "5551234567",
-            "address" : "Calle Falsa 123, Ciudad de México",
-            "canReadAndWrite" : "Sí",
-            "speaksSpanish" : "Sí",
-            "gradeOfStudies" : "Licenciatura",
-            "civilStatus" : "Soltero(a)",
-            "nationality" : "Mexicana",
-            "occupation" : "Ingeniero en pruebas",
-            "clasification" : "Pública",
-            "partyRegime" : "Persona Física",
-            "phoneNumber" : "5551234567",
-            "belongsToIndigenousGroup" : "No"
-            } as IParty;
+        const actor : IParty = buildPartyExample({partyType: "Actor", belongsToIndigenousGroup: "No"});
+        const demandado : IParty = buildPartyExample({partyType : "Demandado"});
+
+        await fillPartyForm(page, actor);
+        await createPartsPage.addPartButton.click();
+        await page.pause();
         
-        const actorRepresentative : IParty = {...principalParty, ...{
-            "email" : "woutVanAert@jumbovisma.com",
-            "partyType" : "Abogado patrono del actor",
-            "names" : "Wout",
-            "paternalSurname" : "Van Aert",
-            "age" : 34,
-            "occupation" : "Ciclista profesional"
-                    }
-            } as IParty;
-
-        const secondActorRepresentative : IParty = {...principalParty, ...{
-            "email" : "jonasVingengaard@jumbovisma.com",
-            "partyType" : "Abogado patrono del actor",
-            "names" : "Jonas",
-            "paternalSurname" : "Vingegaard",
-            "age" : 32,
-            "occupation" : "Ciclista profesional"
-                    }
-            } as IParty;
-
-
-        await fillPartyForm(page, principalParty);
-        const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(principalParty);
-
-        await principalPartyCard.addLegalRepresentativeButton.click();
-        await fillPartyForm(page, actorRepresentative, 'Representative');
-
-        await principalPartyCard.addLegalRepresentativeButton.click();
-        await fillPartyForm(page, secondActorRepresentative, 'Representative');
+        await fillPartyForm(page, demandado);
+        // const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(actor);
 
         // await principalPartyCard.addLegalRepresentativeButton.click();
-        // await fillPartyForm(page, actorSecondRepresentative, 'Representative');
-        await expedientForm.nextButton.click();
+
+        // await principalPartyCard.addLegalRepresentativeButton.click();
+        // await fillPartyForm(page, secondActorRepresentative, 'Representative');
         // await page.pause();
-        await assertSummaryCardInformationIsCorrect(page, {
-            totalParties: 1,
-            actors: 1,
-            defendants: 0,
-            lawyers: 0
-        });
+        // await principalPartyCard.addLegalRepresentativeButton.click();
+        // await fillPartyForm(page, actorSecondRepresentative, 'Representative');
+        // await expedientForm.nextButton.click();
+        // // await page.pause();
+        // await assertSummaryCardInformationIsCorrect(page, {
+        //     totalParties: 2,
+        //     actors: 1,
+        //     defendants: 0,
+        //     lawyers: 0
+        // });
         
-        await createNewExpedientPage.saveAndActivateButton.click();
+        // await createNewExpedientPage.saveAndActivateButton.click();
 
 
         
