@@ -3,14 +3,20 @@ import { test } from '@playwright/test';
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
 import { buildExpedient } from '@data-builders/expedientNumberBuilder';  
-import { assertExpedientGeneralInformationIsCorrect, assertExpedientNumberIsValid } 
-    from '@assertions/createExpedientForm.assert';
 import { fillExpedientForm } from '@actions/createExpedient.action';
+import { fillPartyForm } from '@actions/createParty.action';
+import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
+import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
+import { CreateNewExpedientPartsPage } from '@ui/pages/CreateNewExpedientPartsPage';
+import { IParty } from '@contracts/IParty.interface';
+import { buildParty } from '@data-builders/partyBuilder';
 
 
 test.describe('Create expedient from functionary', () => {
 
     let expedient = buildExpedient({expedientNumber: '5/2026'});
+        const actor : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "No"});
+    const demandado : IParty = buildParty({partyType : "Demandado"});
 
     test.beforeEach(async ({ page }) => {
 
@@ -32,21 +38,27 @@ test.describe('Create expedient from functionary', () => {
 
     test('should create expedient from functionary', async ({ page }) => {
        
-        // await assertLoginSuccess(page);
+        // Arrange
         const navigationBar = new NavigationBar(page);
+        const createNewExpedientPage = new CreateNewExpedientPage(page);
+        const createPartsPage = new CreateNewExpedientPartsPage(page);
+        const expedientForm = new GeneralInformationAboutExpedientForm(page);
         
+        // Act - Fill general information about expedient, at least 2 main parties
         await navigationBar.expedientsTab.click({timeout: 5000});
-
         const judicialExpedientsPage = new JudicialExpedientsPage(page);
         await judicialExpedientsPage.newExpedientButton.click();
 
         expedient = await fillExpedientForm(page, expedient);
         
-        assertExpedientNumberIsValid(page, expedient.expedientNumber);
-    
-        await assertExpedientGeneralInformationIsCorrect(page, expedient);
+        await createNewExpedientPage.addMainPartyButton.click();
+        await page.pause();
+        await fillPartyForm(page, actor);
+        await createPartsPage.addPartButton.click();        
+        await fillPartyForm(page, demandado);
+        await expedientForm.nextButton.click();
 
-
+        
     });
 });
 

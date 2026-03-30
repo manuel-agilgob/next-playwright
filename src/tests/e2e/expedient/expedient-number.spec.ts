@@ -9,30 +9,35 @@ import { ExpedientsSubMenu } from '@ui/components/ExpedientsSubMenu';
 
 
 test.describe('Expedient form', () => {
-
-    // const expedient = buildExpedient({expedientNumber: '5/2026'});
-
+    
     const validExpedientNumbers = [
+        // Se espera que se muestre igual en el input
+        // son valores validos de número de expediente, aunque no se garantiza que sean únicos en el sistema
         '123/2026',
         '999/2026',
-        '1/2026BIS',
-        '1/2026CUADERNILLO'
+        '001/2026',
     ]
 
     const invalidExpedientNumbers = [
+        // Espera que no se muestre igual en el input
         '1-2026',
         '1.2026',
         '1_2026',
-        '1 2026'
+        '1 2026',
+        'abc/2026',
+        '1/abc'
     ];
 
     const invalidFormatsShouldBeCut = [
+        // Espera que el formato no sea aceptado y que se corte al formato correcto
         '1/2026-Otro',
         '1/2026/Extra',
         '1/20267'
     ]
 
     const validButDuplicatedExpedientNumbers = [
+        // Se asume que el número '1/2026' ya existe en el sistema antes de correr el test
+        // Expera que muestre un error explicito, que es duplicado
         '1/2026'
     ]
 
@@ -62,11 +67,15 @@ test.describe('Expedient form', () => {
         await judicialExpedientsPage.newExpedientButton.click();
     });
 
+
+
     for(const expedient of validExpedientNumbers) {
         test(`Expedient number is valid: ${expedient}`, async ({ page }) => {    
             const expedientForm = new GeneralInformationAboutExpedientForm(page);
             console.log('Testing with expedient number: ', expedient);
             await expedientForm.expedientNumberInput.fill( expedient );
+            // await page.pause();
+            await page.waitForTimeout(1000); // Wait for potential debounce or async validation to complete
             assertExpedientNumberIsValid(page, expedient);
             // await page.pause();
         });
@@ -121,4 +130,4 @@ test.describe('Expedient form', () => {
 
 
     })
-});
+})

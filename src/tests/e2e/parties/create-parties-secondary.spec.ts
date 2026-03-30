@@ -1,8 +1,7 @@
-import { test, expect} from '@playwright/test';
+import { test} from '@playwright/test';
 
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
-import { CreateNewExpedientPartsPage } from '@ui/pages/CreateNewExpedientPartsPage';
 import { fillExpedientForm } from '@actions/createExpedient.action';
 import { buildExpedient } from '@data-builders/expedientNumberBuilder';  
 import { buildParty } from '@data-builders/partyBuilder';
