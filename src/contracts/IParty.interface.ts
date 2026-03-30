@@ -44,6 +44,7 @@ export interface IPartyPersonal {
   age: number;
   partyRegime: PartyRegime;
   gender: Gender;
+  companyName?: string; // Optional field for moral parties
 }
 
 // Contact Information Section
@@ -62,6 +63,7 @@ export interface IPartyLegal {
   civilStatus: CivilStatus;
   occupation: string;
   belongsToIndigenousGroup: RandomBoolean;
+  indigenousCommunity?: string; // Optional field shown only if belongsToIndigenousGroup is "Sí"
 }
 
 // Combined interface

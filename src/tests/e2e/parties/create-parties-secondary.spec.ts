@@ -2,17 +2,19 @@ import { test, expect} from '@playwright/test';
 
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
-import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
+import { CreateNewExpedientPartsPage } from '@ui/pages/CreateNewExpedientPartsPage';
+import { fillExpedientForm } from '@actions/createExpedient.action';
 import { buildExpedient } from '@data-builders/expedientNumberBuilder';  
-import { buildPartyExample } from '@data-builders/partyBuilder';
+import { buildParty } from '@data-builders/partyBuilder';
 import { assertExpedientGeneralInformationIsCorrect, assertSummaryCardInformationIsCorrect } from '@assertions/createExpedientForm.assert';
 import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
 import { IParty } from '@contracts/IParty.interface';
 import { fillPartyForm } from '@actions/createParty.action';
+import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
 
-test.describe('Create expedient and parties', () => {
+test.describe('Secondary parties', () => {
 
-    const expedient = buildExpedient({expedientNumber: '5/2026'});
+    let expedient = buildExpedient({expedientNumber: '5/2026'});
 
     test.beforeEach(async ({ page }) => {
 
@@ -31,37 +33,26 @@ test.describe('Create expedient and parties', () => {
         // Wait for page to be ready
         await page.waitForLoadState('networkidle');
     });
-
-    test('should create expedient from functionary', async ({ page }) => {
+    
+    test('secondary parties can be attached to primary parties', async ({ page }) => {
         // await assertLoginSuccess(page);
         const navigationBar = new NavigationBar(page);
-        await navigationBar.expedientsTab.click();
-
         const judicialExpedientsPage = new JudicialExpedientsPage(page);
-        await judicialExpedientsPage.newExpedientButton.click();
-
+        const createNewExpedientPage = new CreateNewExpedientPage(page);
         const expedientForm = new GeneralInformationAboutExpedientForm(page);
 
-        await expedientForm.nextExpedientButton.click();
-        expedient.expedientNumber = await expedientForm.expedientNumberInput.textContent() || '';
-        expect(expedient.expedientNumber).not.toBe('');
-
-        await expedientForm.matterMultiselect.pickOption(expedient.matter);
-        await expedientForm.legalWayMultiselect.pickOption(expedient.legalWay);
-        await expedientForm.kindExpedientMultiselect.pickOption(expedient.kindExpedient);
-        await expedientForm.kindJudgementMultiselect.pickOption(expedient.kindJudgement);
-        await expedientForm.mainActionMultiselect.pickOption(expedient.mainAction);
-        await page.screenshot({ path: `.tmp/screenshot/expedient_form_filled.png` });
-        await expedientForm.nextButton.click();
+        await navigationBar.expedientsTab.click();
+        await judicialExpedientsPage.newExpedientButton.click();
+        
+        expedient = await fillExpedientForm(page, expedient);
 
         await assertExpedientGeneralInformationIsCorrect(page, expedient);
-
-        const createNewExpedientPage = new CreateNewExpedientPage(page);
         await createNewExpedientPage.addMainPartyButton.click();
 
-        const principalParty : IParty =  buildPartyExample({"partyType" : "Actor"});
+
+        const actor : IParty =  buildParty({"partyType" : "Actor"});
         
-        const actorRepresentative : IParty = {...principalParty, ...{
+        const actorRepresentative : IParty = {...actor, ...{
             "email" : "woutVanAert@jumbovisma.com",
             "partyType" : "Abogado patrono del actor",
             "names" : "Wout",
@@ -72,27 +63,27 @@ test.describe('Create expedient and parties', () => {
             } as IParty;
 
 
-        await fillPartyForm(page, principalParty);
-        const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(principalParty);
-
-        await principalPartyCard.addLegalRepresentativeButton.click();
+        await fillPartyForm(page, actor);
+        const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(actor);
+        await principalPartyCard.addLegalRepresentativeButton.click({timeout: 10000});
         await fillPartyForm(page, actorRepresentative, 'Representative');
 
-        // await principalPartyCard.addLegalRepresentativeButton.click();
-        // await fillPartyForm(page, actorSecondRepresentative, 'Representative');
         await expedientForm.nextButton.click();
-        // await page.pause();
+
         await assertSummaryCardInformationIsCorrect(page, {
             totalParties: 1,
             actors: 1,
             defendants: 0,
             lawyers: 0
         });
-        
+        // await page.pause();
         await createNewExpedientPage.saveAndActivateButton.click();
 
 
         
 
     });
+
+
+
 });
