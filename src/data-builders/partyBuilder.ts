@@ -20,9 +20,9 @@ export function buildPartyExample(overrides?: Partial<IParty>): IParty {
         names: faker.person.firstName(),
         paternalSurname: faker.person.lastName(),
         maternalSurname: faker.person.lastName(),
-        birthDate: faker.date.birthdate({ min: 18, max: 65, mode: 'age' }).toDateString(),
+        birthDate: faker.date.birthdate({ min: 18, max: 65, mode: 'age' }).toISOString().split('T')[0], // Format as YYYY-MM-DD
         sex: sexTypes[randomInt(0, sexTypes.length)],
-        clasification: classificationTypes[randomInt(0, classificationTypes.length)],
+        classification: classificationTypes[randomInt(0, classificationTypes.length)],
         alias: faker.internet.username(),
         age: faker.number.int({ min: 18, max: 65 }),
         partyRegime: partyRegimeTypes[randomInt(0, partyRegimeTypes.length)],

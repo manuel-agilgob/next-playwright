@@ -4,6 +4,7 @@ import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
 import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
 import { buildExpedient } from '@data-builders/expedientNumberBuilder';  
+import { buildPartyExample } from '@data-builders/partyBuilder';
 import { assertExpedientGeneralInformationIsCorrect, assertSummaryCardInformationIsCorrect } from '@assertions/createExpedientForm.assert';
 import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
 import { IParty } from '@contracts/IParty.interface';
@@ -58,32 +59,7 @@ test.describe('Create expedient and parties', () => {
         const createNewExpedientPage = new CreateNewExpedientPage(page);
         await createNewExpedientPage.addMainPartyButton.click();
 
-        const principalParty : IParty =  {
-            "partyType" : "Actor",
-            "names" : "José Manuel",
-            "paternalSurname" : "Pérez",
-            "maternalSurname" : "López",
-            "birthDate" : "1990-05-15",
-            "sex" : "Masculino",
-            "classification" : "Pública",
-            "regime" : "Persona Física",
-            "alias" : "Pepe",
-            "age" : 36,
-            "gender" : "Masculino",
-            "email" : "mannedigra@live.com.mx",
-            "phone" : "5551234567",
-            "address" : "Calle Falsa 123, Ciudad de México",
-            "canReadAndWrite" : "Sí",
-            "speaksSpanish" : "Sí",
-            "gradeOfStudies" : "Licenciatura",
-            "civilStatus" : "Soltero(a)",
-            "nationality" : "Mexicana",
-            "occupation" : "Ingeniero en pruebas",
-            "clasification" : "Pública",
-            "partyRegime" : "Persona Física",
-            "phoneNumber" : "5551234567",
-            "belongsToIndigenousGroup" : "No"
-            } as IParty;
+        const principalParty : IParty =  buildPartyExample({"partyType" : "Actor"});
         
         const actorRepresentative : IParty = {...principalParty, ...{
             "email" : "woutVanAert@jumbovisma.com",
@@ -95,25 +71,12 @@ test.describe('Create expedient and parties', () => {
                     }
             } as IParty;
 
-        const secondActorRepresentative : IParty = {...principalParty, ...{
-            "email" : "jonasVingengaard@jumbovisma.com",
-            "partyType" : "Abogado patrono del actor",
-            "names" : "Jonas",
-            "paternalSurname" : "Vingegaard",
-            "age" : 32,
-            "occupation" : "Ciclista profesional"
-                    }
-            } as IParty;
-
 
         await fillPartyForm(page, principalParty);
         const principalPartyCard = createNewExpedientPage.partsOfTheExpedientSection.getPartyCard(principalParty);
 
         await principalPartyCard.addLegalRepresentativeButton.click();
         await fillPartyForm(page, actorRepresentative, 'Representative');
-
-        await principalPartyCard.addLegalRepresentativeButton.click();
-        await fillPartyForm(page, secondActorRepresentative, 'Representative');
 
         // await principalPartyCard.addLegalRepresentativeButton.click();
         // await fillPartyForm(page, actorSecondRepresentative, 'Representative');

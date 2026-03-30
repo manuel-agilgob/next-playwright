@@ -7,14 +7,14 @@ export async function fillPartyForm(page: Page, party: IParty, kind='Actor'): Pr
     console.log(`Starting the form filling for ${party.names} with email ${party.email}, kind (${kind})`);
     const addNewPartForm = new AddNewPartForm(page);
     // Personal Data
-    await addNewPartForm.personalSection.typeMultiselect.pickOption(party.type, false);
+    await addNewPartForm.personalSection.typeMultiselect.pickOption(party.partyType, false);
     await addNewPartForm.personalSection.nameInput.fill(party.names);
-    await addNewPartForm.personalSection.paternalLastNameInput.fill(party.paternalLastName);
-    await addNewPartForm.personalSection.maternalLastNameInput.fill(party.maternalLastName);
-    await addNewPartForm.personalSection.dateOfBirthInput.fill(party.dateOfBirth)
+    await addNewPartForm.personalSection.paternalLastNameInput.fill(party.paternalSurname);
+    await addNewPartForm.personalSection.maternalLastNameInput.fill(party.maternalSurname);
+    await addNewPartForm.personalSection.dateOfBirthInput.fill(party.birthDate)
     await addNewPartForm.personalSection.sexMultiselect.pickOption(party.sex);
     await addNewPartForm.personalSection.clasificationMultiselect.pickOption(party.classification);
-    await addNewPartForm.personalSection.regimeMultiselect.pickOption(party.regime, false);
+    await addNewPartForm.personalSection.regimeMultiselect.pickOption(party.partyRegime, false);
     await addNewPartForm.personalSection.aliasInput.fill(party.alias);
     await addNewPartForm.personalSection.ageInput.fill(party.age.toString());
     await addNewPartForm.personalSection.genderMultiselect.pickOption(party.gender);
@@ -22,7 +22,7 @@ export async function fillPartyForm(page: Page, party: IParty, kind='Actor'): Pr
 
     // Contact Information
     await addNewPartForm.contactSection.emailInput.fill(party.email);
-    await addNewPartForm.contactSection.phoneNumberInput.fill(party.phone);
+    await addNewPartForm.contactSection.phoneNumberInput.fill(party.phoneNumber);
     await addNewPartForm.contactSection.addressInput.fill(party.address)
 
     // Transparency and Legal Information

@@ -2,11 +2,10 @@ import { test } from '@playwright/test';
 
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
-import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
 import { buildExpedient } from '@data-builders/expedientNumberBuilder';  
 import { assertExpedientGeneralInformationIsCorrect, assertExpedientNumberIsValid } 
     from '@assertions/createExpedientForm.assert';
-import { IExpedient } from '@contracts/IExpedient.interface';
+import { fillExpedientForm } from '@actions/createExpedient.action';
 
 
 test.describe('Create expedient from functionary', () => {
@@ -51,19 +50,3 @@ test.describe('Create expedient from functionary', () => {
     });
 });
 
-async function fillExpedientForm(page: any, expedient:IExpedient): Promise<IExpedient> {
-    const expedientForm = new GeneralInformationAboutExpedientForm(page);
-
-    await expedientForm.nextExpedientButton.click();
-    await expedientForm.matterMultiselect.pickOption(expedient.matter);
-    await expedientForm.legalWayMultiselect.pickOption(expedient.legalWay);
-    await expedientForm.kindExpedientMultiselect.pickOption(expedient.kindExpedient);
-    await expedientForm.kindJudgementMultiselect.pickOption(expedient.kindJudgement);
-    await expedientForm.mainActionMultiselect.pickOption(expedient.mainAction);
-    
-    expedient.expedientNumber = (await expedientForm.expedientNumberTextbox.textContent()) || '';
-    console.log('Expedient number obtained from form:', expedient.expedientNumber);
-    await expedientForm.nextButton.click();
-
-    return expedient;
-}
