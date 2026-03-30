@@ -3,7 +3,7 @@ import { test, expect} from '@playwright/test';
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
 import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
-import { buildExpedient } from '@data-builders/expedients/expedientNumberBuilder';  
+import { buildExpedient } from '@data-builders/expedientNumberBuilder';  
 import { assertExpedientGeneralInformationIsCorrect, assertSummaryCardInformationIsCorrect } from '@assertions/createExpedientForm.assert';
 import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
 import { IParty } from '@contracts/IParty.interface';
