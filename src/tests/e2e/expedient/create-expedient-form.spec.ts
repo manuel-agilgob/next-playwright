@@ -5,17 +5,11 @@ import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
 import { buildExpedient } from '@data-builders/expedientNumberBuilder';  
 import { fillExpedientForm } from '@actions/createExpedient.action';
 import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
-import { IParty } from '@contracts/IParty.interface';
-import { buildParty } from '@data-builders/partyBuilder';
-import { assertSubmitButtonIsDisbled, assertSubmitButtonIsEnabled} from '@assertions/createExpedientForm.assert';
 
 
 test.describe('Create expedient from functionary', () => {
 
     let expedient = buildExpedient({expedientNumber: '5/2026'});
-    const actor : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "No"});
-    const demandado : IParty = buildParty({partyType : "Demandado"});
-
     test.beforeEach(async ({ page }) => {
 
         // await page.goto(process.env.BASE_URL || '/');
