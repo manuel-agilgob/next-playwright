@@ -13,7 +13,7 @@ import {
     randomBooleans } from '@contracts/IParty.interface';
 
 
-export function buildPartyExample(overrides?: Partial<IParty>): IParty {
+export function buildParty(overrides?: Partial<IParty>): IParty {
     const defaultParty: IParty = {
         // Personal Information
         partyType: partyTypes[randomInt(0, partyTypes.length)],
@@ -27,6 +27,7 @@ export function buildPartyExample(overrides?: Partial<IParty>): IParty {
         age: faker.number.int({ min: 18, max: 65 }),
         partyRegime: partyRegimeTypes[randomInt(0, partyRegimeTypes.length)],
         gender: genderTypes[randomInt(0, genderTypes.length)],
+        companyName: faker.company.name(), // This will be used only if the party is moral, otherwise it will be ignored
 
         // Contact Information
         email: faker.internet.email(),
@@ -41,6 +42,7 @@ export function buildPartyExample(overrides?: Partial<IParty>): IParty {
         civilStatus: civilStatusTypes[randomInt(0, civilStatusTypes.length)],
         occupation: faker.person.jobTitle(),
         belongsToIndigenousGroup: randomBooleans[randomInt(0, randomBooleans.length)],
+        indigenousCommunity: faker.helpers.arrayElement(['nahuas', 'mayas', 'zapotecos', 'mixtecos','otomíes']) // This will be used only if belongsToIndigenousGroup is "Sí", otherwise it will be ignored, zapotecos, mixtecos y otomíes]) // This will be used only if belongsToIndigenousGroup is "Sí", otherwise it will be ignored
     };
 
     return {
