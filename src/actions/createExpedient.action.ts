@@ -3,10 +3,15 @@ import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformati
 
 
 
-export async function fillExpedientForm(page: any, expedient:IExpedient): Promise<IExpedient> {
+export async function fillExpedientForm(page: any, expedient:IExpedient, chooseNextConsecutive:boolean = true): Promise<IExpedient> {
     const expedientForm = new GeneralInformationAboutExpedientForm(page);
 
-    await expedientForm.nextExpedientButton.click();
+    if(chooseNextConsecutive){
+        await expedientForm.nextExpedientButton.click();
+    } else {
+        await expedientForm.expedientNumberInput.fill(expedient.expedientNumber);
+    }
+
     await expedientForm.matterMultiselect.pickOption(expedient.matter);
     await expedientForm.legalWayMultiselect.pickOption(expedient.legalWay);
     await expedientForm.kindExpedientMultiselect.pickOption(expedient.kindExpedient);
@@ -15,7 +20,7 @@ export async function fillExpedientForm(page: any, expedient:IExpedient): Promis
     
     expedient.expedientNumber = (await expedientForm.expedientNumberTextbox.textContent()) || '';
     console.log('Expedient number obtained from form:', expedient.expedientNumber);
-    await expedientForm.nextButton.click();
+    // await expedientForm.nextButton.click();
 
     return expedient;
 }

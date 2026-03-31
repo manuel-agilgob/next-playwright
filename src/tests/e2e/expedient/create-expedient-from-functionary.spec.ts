@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
@@ -50,6 +50,7 @@ test.describe('Create expedient from functionary', () => {
         await judicialExpedientsPage.newExpedientButton.click();
 
         expedient = await fillExpedientForm(page, expedient);
+        await expedientForm.nextButton.click();
         
         await createNewExpedientPage.addMainPartyButton.click();
         await page.pause();

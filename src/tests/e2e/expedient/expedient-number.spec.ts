@@ -67,40 +67,51 @@ test.describe('Expedient form', () => {
         await judicialExpedientsPage.newExpedientButton.click();
     });
 
-
-
     for(const expedient of validExpedientNumbers) {
         test(`Expedient number is valid: ${expedient}`, async ({ page }) => {    
+            // Arrange
             const expedientForm = new GeneralInformationAboutExpedientForm(page);
+
+            // Action   
             console.log('Testing with expedient number: ', expedient);
             await expedientForm.expedientNumberInput.fill( expedient );
-            // await page.pause();
-            await page.waitForTimeout(1000); // Wait for potential debounce or async validation to complete
+            await page.waitForTimeout(1000);
+
+            // Assert that the expedient number is valid
             assertExpedientNumberIsValid(page, expedient);
-            // await page.pause();
+
         });
     }
 
     for( const expedient of invalidExpedientNumbers) {
         test(`Expedient number should not accept invalid format: ${expedient}`, async ({ page }) => {
+            // Arrange
             const expedientForm = new GeneralInformationAboutExpedientForm(page);
+            
+            // Action
             console.log('Testing with expedient number: ', expedient);
             await expedientForm.expedientNumberInput.fill( expedient );
+
+            // Assertion
             assertExpedientNumberIsInvalid(page, expedient);
-            // await page.pause();
+
         })
     }
 
     for( const expedient of invalidFormatsShouldBeCut) {
         test(`Expedient number should not accept invalid format and cut it: ${expedient}`, async ({ page }) => {
+            // Arrange
             const expedientForm = new GeneralInformationAboutExpedientForm(page);
             console.log('Testing with expedient number: ', expedient);
+            
+            // Action
             await expedientForm.expedientNumberInput.fill( expedient );
+
+            // Assertion
             assertExpedientNumberShouldNotAcceptFormat(page, expedient);
-            // await page.pause();
+
         })
     }
-
 
     for( const expedient of validButDuplicatedExpedientNumbers) {
         test(`Expedient number should not accept duplicate number: ${expedient}`, async ({ page }) => {
@@ -121,7 +132,6 @@ test.describe('Expedient form', () => {
         const form = new GeneralInformationAboutExpedientForm(page);
 
         // Action
-        // await judicialExpedientsPage.newExpedientButton.click();
         await form.nextExpedientButton.click();
         const expedient = await form.expedientNumberInput.textContent();
 

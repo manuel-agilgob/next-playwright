@@ -21,6 +21,7 @@ test.describe('Create expedient and parties', () => {
     let expedient = buildExpedient({expedientNumber: '5/2026'});
     const actor : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "No"});
     const demandado : IParty = buildParty({partyType : "Demandado"});
+    
 
     test.beforeEach(async ({ page }) => {
 
@@ -39,9 +40,12 @@ test.describe('Create expedient and parties', () => {
 
         const navigationBar = new NavigationBar(page);
         const judicialExpedientsPage = new JudicialExpedientsPage(page);
+        const expedientForm = new GeneralInformationAboutExpedientForm(page);
+
         await navigationBar.expedientsTab.click();
         await judicialExpedientsPage.newExpedientButton.click();
         expedient = await fillExpedientForm(page, expedient);
+        await expedientForm.nextButton.click();
     });
 
     test('Company name field is shown when the party is kind Moral', async ({ page }) => {

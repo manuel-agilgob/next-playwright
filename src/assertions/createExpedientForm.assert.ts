@@ -104,3 +104,14 @@ export async function assertSummaryCardInformationIsCorrect(page : Page, parties
     await expect(nwe.summaryCard.getValue('Abogados')).toHaveText(partiesQantity.lawyers.toString());
 }
 
+
+
+export async function assertSubmitButtonIsEnabled(page : Page) {
+    const expedientForm = new GeneralInformationAboutExpedientForm(page);
+    await expect(expedientForm.nextButton).toBeEnabled({timeout: 3000});
+}
+
+export async function assertSubmitButtonIsDisbled(page : Page) {
+    const expedientForm = new GeneralInformationAboutExpedientForm(page);
+    await expect(expedientForm.nextButton).toBeDisabled({timeout: 3000});
+}

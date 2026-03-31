@@ -44,6 +44,7 @@ test.describe('Secondary parties', () => {
         await judicialExpedientsPage.newExpedientButton.click();
         
         expedient = await fillExpedientForm(page, expedient);
+        await expedientForm.nextButton.click();
 
         await assertExpedientGeneralInformationIsCorrect(page, expedient);
         await createNewExpedientPage.addMainPartyButton.click();
