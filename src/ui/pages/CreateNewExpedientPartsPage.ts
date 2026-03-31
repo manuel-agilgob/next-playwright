@@ -1,5 +1,5 @@
 import { IParty } from "@contracts/IParty.interface";
-import { Page } from "@playwright/test";
+import { Page, Locator } from "@playwright/test";
 import { AddPartToExpedientCard } from "@ui/components/AddPartToExpedientCard";
 import { ExpedientGeneralInformationSideBar } from "@ui/components/ExpedientGeneralInformationSideBar";
 import { PartyCreatedCard } from "@ui/components/PartyCreatedCard";
@@ -20,10 +20,13 @@ export class CreateNewExpedientPartsPage {
         return new PartyCreatedCard(this.page, party);
     }
 
-    get addPartButton() {
+    get addPartButton(): Locator{
         return this.page.getByRole('button', { name: 'Agregar Parte' });
     }
 
+    get nextButton(): Locator {
+        return this.page.getByRole('button', { name: 'Siguiente' })
+    }
 }
 
 
