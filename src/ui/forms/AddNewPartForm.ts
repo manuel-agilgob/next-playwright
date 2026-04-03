@@ -138,6 +138,10 @@ class TransparencyAndLegalInformationSection {
         return this.page.getByText('¿A qué comunidad indígena pertenece?')
     }
 
+    get indigenousCommunityInput(): Locator {
+        return this.ingenousCommunityLabel.locator('..').locator('input');
+    }
+
     get canReadAndWriteMultiselect(): Multiselect {
         return new Multiselect(this.page, '¿Puede Leer y Escribir? *');
     }

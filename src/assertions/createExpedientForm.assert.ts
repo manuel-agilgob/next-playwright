@@ -115,3 +115,10 @@ export async function assertSubmitButtonIsDisbled(page : Page) {
     const expedientForm = new GeneralInformationAboutExpedientForm(page);
     await expect(expedientForm.nextButton).toBeDisabled({timeout: 3000});
 }
+
+export async function assertExpedientActivatedMessageIsShown(page : Page, expedientNumber: string) {
+    const createNewExpedientPage = new CreateNewExpedientPage(page);
+    const message = createNewExpedientPage.expedientActivatedMessage(expedientNumber);
+    await message.waitFor({ state: 'attached', timeout: 10000 });
+    await expect(message).toBeVisible();
+}

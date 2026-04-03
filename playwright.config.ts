@@ -44,7 +44,7 @@ export default defineConfig({
         ...devices['Desktop Firefox'],
         storageState: '.tmp/auth.json'
        },
-      dependencies : ['setup']
+      // dependencies : ['setup']
     },
     // {
     //   name: 'webkit',

@@ -1,7 +1,7 @@
 import { IExpedient } from '@contracts/IExpedient.interface';
 import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
-
-
+import { Page } from '@playwright/test';
+import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
 
 export async function fillExpedientForm(page: any, expedient:IExpedient, chooseNextConsecutive:boolean = true): Promise<IExpedient> {
     const expedientForm = new GeneralInformationAboutExpedientForm(page);
@@ -24,3 +24,17 @@ export async function fillExpedientForm(page: any, expedient:IExpedient, chooseN
 
     return expedient;
 }
+
+export async function  saveAndActivate(page:Page) {
+    const createNewExpedientPage = new CreateNewExpedientPage(page);
+  const [response] = await Promise.all([
+    page.waitForResponse(res =>
+      res.url().includes('/api/judicial/expedients'),
+      {timeout: 20000} 
+    ),
+    createNewExpedientPage.saveAndActivateButton.click()
+  ]);
+
+  return response;
+}
+

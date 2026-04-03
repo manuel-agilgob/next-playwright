@@ -15,10 +15,15 @@ import { assertLoginSuccess } from '@assertions/login.assert';
 import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
 import { AddNewPartForm } from '@ui/forms/AddNewPartForm';
 import { assertPartyInformationIsCorrectlyDisplayed } from '@assertions/createParty.assert';
+import { PartyCreatedCard } from '@ui/components/PartyCreatedCard';
+
 
 test.describe('Create expedient and parties', () => {
 
-    let expedient = buildExpedient({expedientNumber: '5/2026'});
+    let expedient = buildExpedient({
+        expedientNumber: '5/2026', matter: 'Familiar', legalWay: 'Control de Detenciones', 
+        kindExpedient: 'PRINCIPAL', kindJudgement: 'Concurso Civil', mainAction: 'ALIMENTOS'
+    });
     const actor : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "No"});
     const demandado : IParty = buildParty({partyType : "Demandado"});
     
@@ -44,7 +49,7 @@ test.describe('Create expedient and parties', () => {
 
         await navigationBar.expedientsTab.click();
         await judicialExpedientsPage.newExpedientButton.click();
-        expedient = await fillExpedientForm(page, expedient);
+        expedient = await fillExpedientForm(page, expedient, true);
         await expedientForm.nextButton.click();
     });
 
@@ -68,8 +73,29 @@ test.describe('Create expedient and parties', () => {
         await createNewExpedientPage.addMainPartyButton.click();
         const moralParty : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "Sí"});
         await form.transparencySection.belongsToIndigenousGroupRadioGroup.chooseOption( moralParty.belongsToIndigenousGroup);
-        expect( await form.transparencySection.ingenousCommunityLabel).toBeVisible();
+
+        const indigenousCommunityLabel = form.transparencySection.ingenousCommunityLabel;
+        await indigenousCommunityLabel.waitFor({ state: 'attached', timeout: 4000 });
+        await expect(indigenousCommunityLabel).toBeVisible({ timeout: 4000 });
     })
+
+    test('Indigenous party is stored and shown properly when edit party', async ({ page }) => {
+        const createNewExpedientPage = new CreateNewExpedientPage(page);
+        const indigenousParty : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "Sí"});
+        const card = new PartyCreatedCard(page, indigenousParty);
+        const form = new AddNewPartForm(page);
+
+        await createNewExpedientPage.addMainPartyButton.click();
+        
+        await fillPartyForm(page, indigenousParty);
+        // await page.pause();
+        await card.editPartyButton.click();
+        const indigenousCommunityInput = form.transparencySection.indigenousCommunityInput;
+        await indigenousCommunityInput.waitFor({ state: 'attached', timeout: 4000 });
+        await expect(indigenousCommunityInput).toHaveValue(indigenousParty.indigenousCommunity!, { timeout: 4000 });
+
+    })
+
 
     test('Principal information is shown correctly in party card.', async ({ page }) => {
         const createNewExpedientPage = new CreateNewExpedientPage(page);

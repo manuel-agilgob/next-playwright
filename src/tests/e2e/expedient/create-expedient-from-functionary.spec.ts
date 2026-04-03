@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 import { NavigationBar } from '@ui/components/NavigationBar';
 import { JudicialExpedientsPage } from '@ui/pages/JudicialExpedientsPage';
@@ -10,11 +10,15 @@ import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
 import { CreateNewExpedientPartsPage } from '@ui/pages/CreateNewExpedientPartsPage';
 import { IParty } from '@contracts/IParty.interface';
 import { buildParty } from '@data-builders/partyBuilder';
-
+import { saveAndActivate } from '@actions/createExpedient.action';
+import { assertExpedientActivatedMessageIsShown } from '@assertions/createExpedientForm.assert';
 
 test.describe('Create expedient from functionary', () => {
 
-    let expedient = buildExpedient({expedientNumber: '5/2026'});
+    let expedient = buildExpedient({
+        expedientNumber: '5/2026', matter: 'Familiar', legalWay: 'Control de Detenciones', 
+        kindExpedient: 'PRINCIPAL', kindJudgement: 'Concurso Civil', mainAction: 'ALIMENTOS'
+    });
         const actor : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "No"});
     const demandado : IParty = buildParty({partyType : "Demandado"});
 
@@ -35,7 +39,7 @@ test.describe('Create expedient from functionary', () => {
         // Wait for page to be ready
         await page.waitForLoadState('networkidle');
     });
-
+    test.slow();
     test('should create expedient from functionary', async ({ page }) => {
        
         // Arrange
@@ -49,16 +53,30 @@ test.describe('Create expedient from functionary', () => {
         const judicialExpedientsPage = new JudicialExpedientsPage(page);
         await judicialExpedientsPage.newExpedientButton.click();
 
-        expedient = await fillExpedientForm(page, expedient);
+        expedient = await fillExpedientForm(page, expedient, true);
+
         await expedientForm.nextButton.click();
         
         await createNewExpedientPage.addMainPartyButton.click();
-        await page.pause();
+
         await fillPartyForm(page, actor);
-        await createPartsPage.addPartButton.click();        
+        await createPartsPage.addPartButton.click();       
         await fillPartyForm(page, demandado);
         await expedientForm.nextButton.click();
 
+        const response = await saveAndActivate(page);
+
+        // Assertions 
+        // 1 - API response status should be 201
+        expect([200, 201]).toContain(response.status());
+
+        // 2 - Expedient activated message should be shown with correct expedient number
+        await assertExpedientActivatedMessageIsShown(page, expedient.expedientNumber);
+
+        // - Expedient is shown in My Expedients list with correct information 
+        // - Expedient number should be displayed in the UI
+        // - All parties information should be correct in the summary card and in the general information section of the expedient form
+        
         
     });
 });

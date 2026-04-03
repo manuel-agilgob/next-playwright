@@ -32,22 +32,12 @@
     "faker": "^6.6.6"
   },
   "scripts": {
-    "test": "playwright test",
-    "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed",
-    "test:debug": "playwright test --debug",
-    "test:smoke": "playwright test src/tests/smoke",
-    "test:e2e": "playwright test src/tests/e2e",
-    "test:regression": "playwright test src/tests/regression",
-    "report": "playwright show-report",
-    "build": "tsc",
+    "validate": "npx tsc --noEmit",
     "clean": "rm -rf dist",
     "lint": "eslint . && ls-lint",
     "lint:eslint": "eslint .",
     "lint:files": "ls-lint",
     "lint:fix": "eslint . --fix",
-    "encrypt:env": "gpg --symmetric --cipher-algo AES256 --output .env.local.gpg .env.local",
-    "decrypt:env": "gpg --decrypt --output .env.local .env.local.gpg",
     "create-expedient:fun": "npx playwright test src/tests/e2e/create-expedient-from-functionary.spec.ts --headed",
     "count:ts": "find . -type f -name \"*.ts\" -not -path \"*/node_modules/*\" -exec cat {} + | wc -l",
 

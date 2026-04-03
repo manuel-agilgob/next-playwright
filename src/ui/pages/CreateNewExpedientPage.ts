@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import { CreateNewExpedientPartsPage } from "./CreateNewExpedientPartsPage";
 import { SummaryCard } from "@ui/components/SummaryCard";
 
@@ -20,6 +20,11 @@ export class CreateNewExpedientPage {
 
     public get saveAndActivateButton(){
         return this.page.getByRole('button', { name: 'Guardar y Activar' })
+    }
+
+    public expedientActivatedMessage(expedientNumber: string): Locator{
+        return this.page.getByLabel('Notifications', { exact: true })
+            .getByText(`Expediente ${expedientNumber} creado y activado correctamente`)
     }
 
 }   
