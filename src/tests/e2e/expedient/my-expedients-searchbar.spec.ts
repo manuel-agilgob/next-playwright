@@ -14,6 +14,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
     
         await expect(myExpedients.myExpedientsTitle).toBeVisible();
         await expect(myExpedients.subTitle).toBeVisible();
+        await myExpedients.inputSearchBar.waitFor({ state: 'visible', timeout: 3000 });
 
         await page.waitForLoadState('networkidle');
     })
@@ -66,7 +67,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
     test.describe('Search expedient by paternal surname', () => {
         for( const {expedientNumber, surname} of [
             {expedientNumber: '1/2026', surname: 'Barrios Reyna'},
-            {expedientNumber: '3/2026', surname: 'García López'},
+            {expedientNumber: '3/2026', surname: 'Raya de Muñoz'},
             {expedientNumber: '5/2026', surname: 'Yami Cintrón'},
         ] as CaseBySurname[]){
             test(`CASE : ${expedientNumber} - ${surname}`, async ({ page }) => {
@@ -161,6 +162,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
 
                 expect( expedientRow ).toBeVisible();
 
+                await myExpedients.clearSearchButton.waitFor({'state' : 'visible', timeout: 1500});
                 await myExpedients.clearSearchButton.click();
                 await page.waitForTimeout(1000);
 

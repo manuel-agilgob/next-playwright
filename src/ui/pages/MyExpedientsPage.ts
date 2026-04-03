@@ -19,11 +19,17 @@ export class MyExpedientsPage {
     }
 
     get inputSearchBar() {
-        return this.page.locator('input[placeholder*="expediente"]');
+        return this.page.locator('input[placeholder*="expediente"]')
+            .or(this.page.locator('input[placeholder*="Buscar por número, actor, demandado o materia..."]'));
     }
 
     get notFoundExpedientMessage(){
         return this.page.getByText('No se encontraron expedientes con los criterios ingresados')
+            .or( this.noExpedientsMessage );
+    }
+
+    get noExpedientsMessage() {
+        return this.page.getByRole('cell').getByText('No tienes expedientes');
     }
 
     get searchButton() {
