@@ -12,9 +12,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined, // Cambiar para el numero de workers en CI
-  // reporter: 'html',
+  reporter: 'html',
   // reporter: 'list',
-  reporter: 'dot',
+  // reporter: 'dot',
   
   use: {
     baseURL: process.env.BASE_URL || 'http://localhost:3002',
@@ -44,7 +44,7 @@ export default defineConfig({
         ...devices['Desktop Firefox'],
         storageState: '.tmp/auth.json'
        },
-      // dependencies : ['setup']
+      dependencies : ['setup']
     },
     // {
     //   name: 'webkit',

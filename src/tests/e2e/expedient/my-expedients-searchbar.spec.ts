@@ -34,7 +34,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
                 await expedientRow.waitFor({ state: 'visible', timeout: 3000 });
 
                 // Assert
-                expect( expedientRow).toBeVisible();
+                expect( expedientRow ).toBeVisible();
 
             })
         }
@@ -164,7 +164,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
                 await myExpedients.clearSearchButton.click();
                 await page.waitForTimeout(1000);
 
-                await expect( myExpedients.expedientsTableRows ).toHaveCount(10);
+                await expect( myExpedients.expedientsTable.tableRows ).toHaveCount(10);
             })
         }
     })

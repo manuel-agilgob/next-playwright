@@ -15,6 +15,14 @@ export class MyExpedientsExpedientsTable {
         return new ExpedientRow(this.page, expedientNumber);
     }
 
+    get tableBody(){
+        return this.table.locator('tbody');
+    }
+
+    get tableRows() {
+        return this.tableBody.locator('tr');
+    }
+
 }
 
 

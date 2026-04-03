@@ -34,13 +34,6 @@ export class MyExpedientsPage {
         return this.page.getByRole('button', { name: 'Limpiar' })
     }
 
-    get expedientsTableBody(){
-        return this.page.locator('table').locator('table[class*="md:table"]');
-    }
-
-    get expedientsTableRows() {
-        return this.expedientsTableBody.locator('tr');
-    }
 
     public getExpedientRowByNumber(expedientNumber: string) {
         return this.page.getByRole('cell', { name: expedientNumber, exact: true })
