@@ -1,6 +1,5 @@
 import { expect, test} from '@playwright/test';
 import { MyExpedientsPage } from '@ui/pages/MyExpedientsPage';
-import { ExpedientDetailsPage } from '@ui/pages/ExpedientDetailPage';
 
 
 test.describe('Mis Expedientes - Searchbar', () => {
