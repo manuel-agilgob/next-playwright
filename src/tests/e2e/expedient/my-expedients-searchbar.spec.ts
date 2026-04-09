@@ -1,11 +1,7 @@
 import { expect, test} from '@playwright/test';
 import { MyExpedientsPage } from '@ui/pages/MyExpedientsPage';
-import { ExpedientDetailsPage } from '@ui/pages/ExpedientDetailPage';
-
 
 test.describe('Mis Expedientes - Searchbar', () => {
-
-    
 
     test.beforeEach(async ({ page }) => {
         const myExpedients = new MyExpedientsPage(page);
@@ -176,7 +172,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
             test(`CASE : ${expedient}`, async ({ page }) => {
                 // Arrange
                 const myExpedients = new MyExpedientsPage(page);
-                const expedientDetails = new ExpedientDetailsPage(page);
+                
                 
                 await myExpedients.inputSearchBar.fill(expedient);
                 await myExpedients.inputSearchBar.press('Enter');
