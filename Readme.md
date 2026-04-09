@@ -75,3 +75,8 @@ Esta situación introduce riesgos como la contaminación de datos y la posibilid
 Para mitigar estas dependencias, se utiliza un archivo de seguimiento temporal (.tmp) que actúa como mecanismo de control. Este archivo registra banderas sobre el estado de ejecución de pruebas previas y permite omitir aquellas que, por sus dependencias no satisfechas, están destinadas a fallar. Con esto se evita la ejecución innecesaria y la pérdida de tiempo.
 
 Es importante señalar que este enfoque funciona como un workaround temporal, no como una solución definitiva. A futuro, se debe considerar una estrategia que permita el aislamiento y/o limpieza de datos de prueba, garantizando independencia entre escenarios y mayor confiabilidad en los resultados.
+
+
+
+# Notas personales 
+[interceptions - saveAndActivate](src/actions/createExpedient.action.ts)

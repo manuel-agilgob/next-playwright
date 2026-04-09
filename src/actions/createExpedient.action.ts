@@ -27,14 +27,14 @@ export async function fillExpedientForm(page: any, expedient:IExpedient, chooseN
 
 export async function  saveAndActivate(page:Page) {
     const createNewExpedientPage = new CreateNewExpedientPage(page);
-  const [response] = await Promise.all([
-    page.waitForResponse(res =>
-      res.url().includes('/api/judicial/expedients'),
-      {timeout: 20000} 
-    ),
-    createNewExpedientPage.saveAndActivateButton.click()
-  ]);
+    const [response] = await Promise.all([
+      page.waitForResponse(res =>
+        res.url().includes('/api/judicial/expedients'),
+        {timeout: 20000} 
+      ),
+      createNewExpedientPage.saveAndActivateButton.click()
+    ]);
 
-  return response;
+    return response;
 }
 

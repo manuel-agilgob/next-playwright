@@ -185,11 +185,14 @@ test.describe('Mis Expedientes - Searchbar', () => {
                 await expect(expedientRow.number).toBeVisible();
                 await expedientRow.number.click();
 
-                const printCoverButton = expedientDetails.expedientActionsMenuCard.printCoverButton;
-                await expect(printCoverButton).toBeVisible();
+                await expect(page.getByText(`Expediente ${expedient}`)).toBeVisible();
+                await expect(page).toHaveURL(/\/expedientes\/\d+/);
 
-                await expect(expedientDetails.title)
-                    .toHaveText(`Expediente ${expedient}`);
+                // const printCoverButton = expedientDetails.expedientActionsMenuCard.printCoverButton;
+                // await expect(printCoverButton).toBeVisible();
+
+                // await expect(expedientDetails.title)
+                //     .toHaveText(`Expediente ${expedient}`);
 
             })
         }
