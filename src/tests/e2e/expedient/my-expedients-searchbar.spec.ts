@@ -87,6 +87,92 @@ test.describe('Mis Expedientes - Searchbar', () => {
         }
     })
 
+    test.describe('Search expedient by name without accents', () => {
+        for( const {expedientNumber, surname} of [
+            // Accents are removed in search, but should find expedient
+            {expedientNumber: '5/2026', surname: 'Yami Cintron'}, 
+            {expedientNumber: '1/2026', surname: 'Quevedo Hernadez'}, 
+            {expedientNumber: '5/2026', surname: 'de Anda Jaquez'}, 
+            {expedientNumber: '19/2026', surname: 'Monica Gomez Vega'},
+
+        ] as CaseBySurname[]){
+            test(`CASE : ${expedientNumber} - ${surname}`, async ({ page }) => {
+                // Arrange
+                const myExpedients = new MyExpedientsPage(page);
+                
+                // Actions
+                await myExpedients.inputSearchBar.fill(surname);
+                await myExpedients.inputSearchBar.press('Enter');
+                await page.waitForTimeout(1000); // Do not remove, because row can be found 
+                // before search results are updated, causing test to fail
+
+                const expedientRow = await myExpedients.getExpedientRowByNumber(expedientNumber);
+                await expedientRow.waitFor({ state: 'attached', timeout: 3000 })
+                await expedientRow.waitFor({ state: 'visible', timeout: 3000 });
+
+                // Assert
+                expect( expedientRow ).toBeVisible();
+            })
+        }
+    })
+
+    test.describe('Search in UPPERCASE should find expedient', () => {
+        for( const {expedientNumber, surname} of [
+            {expedientNumber: '1/2026', surname: 'BARRIOS REYNA'},
+            {expedientNumber: '3/2026', surname: 'RAYA DE MUÑOZ'},
+            {expedientNumber: '5/2026', surname: 'YAMI CINTRÓN'},
+        ] as CaseBySurname[]){
+            test(`CASE : ${expedientNumber} - ${surname}`, async ({ page }) => {
+                // Arrange
+                const myExpedients = new MyExpedientsPage(page);
+                
+                // Actions
+                await myExpedients.inputSearchBar.fill(surname);
+                await myExpedients.inputSearchBar.press('Enter');
+                await page.waitForTimeout(1000); // Do not remove, because row can be found 
+                // before search results are updated, causing test to fail
+
+                const expedientRow = await myExpedients.getExpedientRowByNumber(expedientNumber);
+                await expedientRow.waitFor({ state: 'attached', timeout: 3000 })
+                await expedientRow.waitFor({ state: 'visible', timeout: 3000 });
+
+                // Assert
+                expect( expedientRow ).toBeVisible();
+
+            })
+        }
+    })
+
+    type CaseByKind = {expedientNumber: string, surname: string, kind: string};
+
+    test.describe('Search by Actor and Defendant', () => {
+        for( const {expedientNumber, surname, kind} of [
+            {expedientNumber: '2/2026', surname: 'Benjamín Araña Pichardo', kind : 'Actor'},
+            {expedientNumber: '3/2026', surname: 'Benito Raya de Muñoz', kind : 'Actor'},
+            {expedientNumber: '1/2026', surname: 'Claudia Kanzaki Casares', kind : 'Defendant'},
+            {expedientNumber: '2/2026', surname: 'Emilio Prado Nava', kind : 'Defendant'},
+        ] as CaseByKind[]){
+            test(`CASE : ${expedientNumber} - ${surname} - ${kind}`, async ({ page }) => {
+                // Arrange
+                const myExpedients = new MyExpedientsPage(page);
+                
+                // Actions
+                await myExpedients.inputSearchBar.fill(surname);
+                await myExpedients.inputSearchBar.press('Enter');
+                await page.waitForTimeout(1000); // Do not remove, because row can be found 
+                // before search results are updated, causing test to fail
+
+                const expedientRow = await myExpedients.getExpedientRowByNumber(expedientNumber);
+                await expedientRow.waitFor({ state: 'attached', timeout: 3000 })
+                await expedientRow.waitFor({ state: 'visible', timeout: 3000 });
+
+                // Assert
+                expect( expedientRow ).toBeVisible();
+
+            })
+        }
+    })
+
     test.describe('Search expedient by maternal surname', () => {
         for( const {expedientNumber, surname} of [
             {expedientNumber: '6/2026', surname: 'Quiroz Henríquez'},

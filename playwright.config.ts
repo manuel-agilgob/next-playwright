@@ -8,7 +8,7 @@ dotenvx.config({
 export default defineConfig({
   testDir: './src/tests',
   timeout: 5 * 60 * 1000, // 5 minutes
-  fullyParallel: false,
+  fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : 4, // Cambiar para el numero de workers en CI
