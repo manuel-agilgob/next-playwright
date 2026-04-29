@@ -10,7 +10,7 @@ export class NavigationBar {
     }
 
     public navigationBar(tabName: string): Locator {
-        return this.nav.getByRole('button', { name: tabName, exact: true });
+        return this.nav.getByText( tabName, { exact: true} );
     }
 
     public get initTab(): Locator {

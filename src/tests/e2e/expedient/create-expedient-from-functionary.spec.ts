@@ -39,7 +39,7 @@ test.describe('Create expedient from functionary', () => {
         // Wait for page to be ready
         await page.waitForLoadState('networkidle');
     });
-    test.slow();
+
     test('should create expedient from functionary', async ({ page }) => {
        
         // Arrange

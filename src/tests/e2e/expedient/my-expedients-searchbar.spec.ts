@@ -15,7 +15,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
         await page.waitForLoadState('networkidle');
     })
 
-    test.describe('Searchbar should find expedient by exact number', () => {
+        test.describe('Should find expedient by exact number', () => {
         for( const expedient of ['1/2026', '10/2026', '18/2026']){
             test(`CASE : ${expedient}`, async ({ page }) => {
                 // Arrange
@@ -37,7 +37,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
         }
     })
 
-    test.describe('Search expedient that does not exist', () => {
+    test.describe('Searchbar should not find expedient that does not exist', () => {
         for( const expedient of ['999/2026', 'abc/2026', '@/2026' ]){
             test(`CASE : ${expedient}`, async ({ page }) => {
                 // Arrange
@@ -60,7 +60,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
 
     type CaseBySurname = {expedientNumber: string, surname: string};
 
-    test.describe('Search expedient by paternal surname', () => {
+    test.describe('Should search expedient by paternal surname', () => {
         for( const {expedientNumber, surname} of [
             {expedientNumber: '1/2026', surname: 'Barrios Reyna'},
             {expedientNumber: '3/2026', surname: 'Raya de Muñoz'},
@@ -87,7 +87,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
         }
     })
 
-    test.describe('Search expedient by name without accents', () => {
+    test.describe('Should search cases by name without accents', () => {
         for( const {expedientNumber, surname} of [
             // Accents are removed in search, but should find expedient
             {expedientNumber: '5/2026', surname: 'Yami Cintron'}, 
@@ -116,7 +116,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
         }
     })
 
-    test.describe('Search in UPPERCASE should find expedient', () => {
+    test.describe('Should search expedient by paternal surname in UPPERCASE', () => {
         for( const {expedientNumber, surname} of [
             {expedientNumber: '1/2026', surname: 'BARRIOS REYNA'},
             {expedientNumber: '3/2026', surname: 'RAYA DE MUÑOZ'},
@@ -145,7 +145,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
 
     type CaseByKind = {expedientNumber: string, surname: string, kind: string};
 
-    test.describe('Search by Actor and Defendant', () => {
+    test.describe('Should search by Actor and Defendant', () => {
         for( const {expedientNumber, surname, kind} of [
             {expedientNumber: '2/2026', surname: 'Benjamín Araña Pichardo', kind : 'Actor'},
             {expedientNumber: '3/2026', surname: 'Benito Raya de Muñoz', kind : 'Actor'},
@@ -173,7 +173,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
         }
     })
 
-    test.describe('Search expedient by maternal surname', () => {
+    test.describe('Should search expedient by maternal surname', () => {
         for( const {expedientNumber, surname} of [
             {expedientNumber: '6/2026', surname: 'Quiroz Henríquez'},
             {expedientNumber: '7/2026', surname: 'Duarte de Lerma'},
@@ -200,7 +200,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
         }
     })
 
-    test.describe('Search expedient by fullname', () => {
+    test.describe('Should search expedient by fullname', () => {
         for( const {expedientNumber, surname} of [
             {expedientNumber: '8/2026', surname: 'MARGARITA SOSA MOTA CARBAJAL CORTÉS'},
             {expedientNumber: '9/2026', surname: 'Ana Luisa Muñiz Mercado Perea Menchaca'},
@@ -227,7 +227,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
         }
     })
 
-    test.describe('Button clear search should clear searchbar and show all expedients', () => {
+    test.describe('Should clear search button and show all expedients', () => {
         for( const expedient of ['1/2026', '10/2026', '18/2026']){
             test(`CASE : ${expedient}`, async ({ page }) => {
                 // Arrange
@@ -253,7 +253,7 @@ test.describe('Mis Expedientes - Searchbar', () => {
         }
     })
 
-    test.describe('Navigate to expedients detail', () => {
+    test.describe('Should navigate to expedient details', () => {
         for( const expedient of ['1/2026', '10/2026', '18/2026']){
             test(`CASE : ${expedient}`, async ({ page }) => {
                 // Arrange
