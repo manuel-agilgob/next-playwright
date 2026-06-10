@@ -36,31 +36,15 @@ export class GeneralInformationAboutExpedientForm {
         return this.page.locator('#expedientNumber');
     }
 
-    // public get kindExpedientButton(): Locator {
-    //     return this.page.getByText('Escribe para buscar tipo de expediente...')
-    //         .locator('..');
-    // }
+    get expedientNumberTextbox() : Locator {
+        return this.page.getByText('Número de Expediente', { exact: true })
+            .locator('..')
+            .locator('p.tracking-tight')
+    }
 
-    // public get matterButton(): Locator {
-    //     return this.page.getByText('Escribe para buscar materia...')
-    //         .locator('..');
-    // }
-
-    // public get kindJudgementButton(): Locator {
-    //     return this.page.getByText('Escribe para buscar tipo de juicio...')
-    //         .locator('..');
-    // }
-
-    // public get legayWayButton(): Locator {
-    //     return this.page.getByText('Seleccione la vía del proceso.')
-    //         .locator('..');
-    // }
-
-
-    // public get mainActionButton(): Locator {
-    //     return this.page.getByText('Escribe para buscar acción principal...')
-    //         .locator('..');
-    // }
+    get nextExpedientButton(): Locator {
+        return this.page.getByText('Siguiente sugerido: ');
+    }
 
     get nextButton(): Locator {
         return this.page.getByRole('button', { name: 'Siguiente' });

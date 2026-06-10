@@ -1,20 +1,22 @@
 import { Page, expect } from '@playwright/test';
 import { GeneralInformationAboutExpedientForm } from '@ui/forms/GeneralInformationAboutExpedientForm';
-import { Expedient } from '../data-builders/expedient.interface';
+import { IExpedient } from '../contracts/IExpedient.interface';
 import { ExpedientGeneralInformationSideBar } from '@ui/components/ExpedientGeneralInformationSideBar';
 import { CreateNewExpedientPage } from '@ui/pages/CreateNewExpedientPage';
 
 
 
 export async function assertExpedientNumberIsValid(page : Page, textContent : string) {
+    
+    
     const expedientForm = new GeneralInformationAboutExpedientForm(page);
     expect( await expedientForm.expedientNumberInput
         .inputValue()).toContain( textContent );
     
-    expect( expedientForm.expedientNumberValidIcon).toBeVisible();
+    await expect(expedientForm.expedientNumberValidIcon).toBeVisible({ timeout: 3000 });
     expect( expedientForm.expedientNumberInvalidIcon).not.toBeVisible();
 
-    expect( expedientForm.expedientNumberGreenIcon).toBeVisible();
+    await expect(expedientForm.expedientNumberGreenIcon).toBeVisible({ timeout: 3000 });
     expect( expedientForm.expedientNumberRedIcon).not.toBeVisible();
     
 }
@@ -35,13 +37,13 @@ export async function assertExpedientNumberIsDuplicate(page : Page, textContent 
     const expedientForm = new GeneralInformationAboutExpedientForm(page);
     expect( await expedientForm.expedientNumberInput
         .inputValue()).toContain( textContent );
-    expect( expedientForm.expedientDuplicatedAlert).toBeVisible();
+    expect( expedientForm.expedientDuplicatedAlert).toBeVisible({ timeout: 3000 });
 
-    expect( expedientForm.expedientNumberValidIcon).not.toBeVisible();
-    expect( expedientForm.expedientNumberInvalidIcon).toBeVisible();
+    expect( expedientForm.expedientNumberValidIcon).not.toBeVisible({ timeout: 3000 });
+    expect( expedientForm.expedientNumberInvalidIcon).toBeVisible({ timeout: 3000 });
 
-    expect( expedientForm.expedientNumberGreenIcon).not.toBeVisible();
-    expect( expedientForm.expedientNumberRedIcon).toBeVisible();
+    expect( expedientForm.expedientNumberGreenIcon).not.toBeVisible({ timeout: 3000 });
+    expect( expedientForm.expedientNumberRedIcon).toBeVisible({ timeout: 3000 });
 
 };
 
@@ -58,7 +60,7 @@ export async function assertExpedientNumberShouldNotAcceptFormat(page : Page, in
         .inputValue()).not.toContain( invalidFormat )
 }
 
-export async function assertExpedientGeneralInformationIsCorrect(page : Page, expedient : Expedient) {
+export async function assertExpedientGeneralInformationIsCorrect(page : Page, expedient : IExpedient) {
 
         const expedientSideBar = new ExpedientGeneralInformationSideBar(page);
 
@@ -102,3 +104,21 @@ export async function assertSummaryCardInformationIsCorrect(page : Page, parties
     await expect(nwe.summaryCard.getValue('Abogados')).toHaveText(partiesQantity.lawyers.toString());
 }
 
+
+
+export async function assertSubmitButtonIsEnabled(page : Page) {
+    const expedientForm = new GeneralInformationAboutExpedientForm(page);
+    await expect(expedientForm.nextButton).toBeEnabled({timeout: 3000});
+}
+
+export async function assertSubmitButtonIsDisbled(page : Page) {
+    const expedientForm = new GeneralInformationAboutExpedientForm(page);
+    await expect(expedientForm.nextButton).toBeDisabled({timeout: 3000});
+}
+
+export async function assertExpedientActivatedMessageIsShown(page : Page, expedientNumber: string) {
+    const createNewExpedientPage = new CreateNewExpedientPage(page);
+    const message = createNewExpedientPage.expedientActivatedMessage(expedientNumber);
+    await message.waitFor({ state: 'attached', timeout: 10000 });
+    await expect(message).toBeVisible();
+}
