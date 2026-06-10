@@ -1,4 +1,6 @@
-# Estructura del proyecto 
+# Estructura del proyecto
+
+> Hotfix de prueba para validar el workflow de GitHub Actions.
 
 ``` bash
 src/
