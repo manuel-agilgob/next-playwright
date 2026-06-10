@@ -1,15 +1,19 @@
 import {Page, Locator} from '@playwright/test';
 
 
-export class JudicialExpedientsPage {
+export class ExpedientDetailsPage {
     private readonly page: Page;
-    public ExpedientActionsMenuCard: ExpedientActionsMenuCard;
+    public expedientActionsMenuCard: ExpedientActionsMenuCard;
     
     constructor(page: Page) {
         this.page = page;
-        this.ExpedientActionsMenuCard = new ExpedientActionsMenuCard(this.page);
+        this.expedientActionsMenuCard = new ExpedientActionsMenuCard(this.page);
     }
     
+    get title(){
+        return this.page.getByRole('heading', { level: 1, name: 'Expediente' });
+    }
+
 
 }   
 
@@ -27,8 +31,10 @@ export class ExpedientActionsMenuCard {
     readonly generateQRButton: Locator;
     readonly listPartsButton: Locator;
 
+
     constructor(page: Page) {
         this.page = page;
+        
         this.printCoverButton = page.getByRole('button', { name: /Imprimir carátula/ });
         this.downloadCoverButton = page.getByRole('button', { name: /Descargar carátula/ });
         this.transferExpedientButton = page.getByRole('button', { name: /Turnar expediente/ });

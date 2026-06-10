@@ -85,6 +85,10 @@ class PersonalSection {
     get ageInput(): Locator {
         return this.page.getByPlaceholder('Edad');
     }
+
+    get companyNameInput(): Locator {
+        return this.page.getByRole('textbox', { name: 'Razón Social' })
+    }
 }
 
 class ContactSection {
@@ -128,6 +132,14 @@ class TransparencyAndLegalInformationSection {
 
     get belongsToIndigenousGroupRadioGroup(): RadioGroup {
         return new RadioGroup(this.page, '¿Pertenece a una comunidad indígena?');
+    }
+
+    get ingenousCommunityLabel(): Locator {
+        return this.page.getByText('¿A qué comunidad indígena pertenece?')
+    }
+
+    get indigenousCommunityInput(): Locator {
+        return this.ingenousCommunityLabel.locator('..').locator('input');
     }
 
     get canReadAndWriteMultiselect(): Multiselect {

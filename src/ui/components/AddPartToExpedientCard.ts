@@ -3,7 +3,7 @@
 import {Page, Locator} from '@playwright/test';
 
 
-export class AddPartToExpedientWrapper {
+export class AddPartToExpedientCard {
     
     private readonly page: Page;
 
