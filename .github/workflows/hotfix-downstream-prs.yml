@@ -1,0 +1,44 @@
+name: Create downstream PRs for hotfixes
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - production
+
+jobs:
+  create-prs:
+    if: >
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'hotfix/')
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Create PR to sandbox
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --repo ${{ github.repository }} \
+            --base sandbox \
+            --head production \
+            --title "[HOTFIX] Sync production -> sandbox" \
+            --body "PR generado automáticamente después de fusionar un hotfix en production." \
+            --reviewer manuel-agilgob
+
+      - name: Create PR to staging
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --repo ${{ github.repository }} \
+            --base staging \
+            --head production \
+            --title "[HOTFIX] Sync production -> staging" \
+            --body "PR generado automáticamente después de fusionar un hotfix en production." \
+            --reviewer manuel-agilgob
