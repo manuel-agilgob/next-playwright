@@ -13,14 +13,21 @@ import { buildParty } from '@data-builders/partyBuilder';
 import { saveAndActivate } from '@actions/createExpedient.action';
 import { assertExpedientActivatedMessageIsShown } from '@assertions/createExpedientForm.assert';
 
-test.describe('Create expedient from functionary', () => {
+test.describe('Create expedient with multiple parties [3-3]', () => {
 
     let expedient = buildExpedient({
         expedientNumber: '5/2026', matter: 'Familiar', legalWay: 'Control de Detenciones', 
         kindExpedient: 'PRINCIPAL', kindJudgement: 'Concurso Civil', mainAction: 'ALIMENTOS'
     });
-        const actor : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "No"});
+
+    const actor : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "No"});
+    const actor2 : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "No"});
+    const actor3 : IParty = buildParty({partyType: "Actor", belongsToIndigenousGroup: "No"});
+
     const demandado : IParty = buildParty({partyType : "Demandado"});
+    const demandado2 : IParty = buildParty({partyType : "Demandado"});
+    const demandado3 : IParty = buildParty({partyType : "Demandado"});
+
 
     test.beforeEach(async ({ page }) => {
 
@@ -39,8 +46,8 @@ test.describe('Create expedient from functionary', () => {
         // Wait for page to be ready
         await page.waitForLoadState('networkidle');
     });
-
-    test('should create expedient from functionary', async ({ page }) => {
+    test.slow();
+    test('should create expedient from functionary with its parties [3-3]', async ({ page }) => {
        
         // Arrange
         const navigationBar = new NavigationBar(page);
@@ -60,8 +67,22 @@ test.describe('Create expedient from functionary', () => {
         await createNewExpedientPage.addMainPartyButton.click();
 
         await fillPartyForm(page, actor);
-        await createPartsPage.addPartButton.click();       
+
+        await createPartsPage.addPartButton.click();  
         await fillPartyForm(page, demandado);
+
+        await createPartsPage.addPartButton.click();  
+        await fillPartyForm(page, demandado2);
+
+        await createPartsPage.addPartButton.click();  
+        await fillPartyForm(page, demandado3);
+
+        await createPartsPage.addPartButton.click();  
+        await fillPartyForm(page, actor2);
+
+        await createPartsPage.addPartButton.click();  
+        await fillPartyForm(page, actor3);
+
         await expedientForm.nextButton.click();
 
         const response = await saveAndActivate(page);

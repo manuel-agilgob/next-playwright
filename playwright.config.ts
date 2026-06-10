@@ -1,16 +1,17 @@
 import { defineConfig, devices } from '@playwright/test';
-import dotenv from 'dotenv';
+import dotenvx from '@dotenvx/dotenvx';
 
-dotenv.config({
+dotenvx.config({
   path: `.env.${process.env.ENV || 'local'}`
 });
 
 export default defineConfig({
   testDir: './src/tests',
-  fullyParallel: true,
+  timeout: 5 * 60 * 1000, // 5 minutes
+  fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 1 : 6, // Cambiar para el numero de workers en CI
   reporter: 'html',
   // reporter: 'list',
   // reporter: 'dot',
