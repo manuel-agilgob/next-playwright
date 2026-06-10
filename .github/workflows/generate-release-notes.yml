@@ -1,0 +1,145 @@
+name: Generate Release Notes
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  generate-release-notes:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get tag info
+        id: tags
+        run: |
+          CURRENT_TAG=${GITHUB_REF#refs/tags/}
+          PREV_TAG=$(git describe --tags --abbrev=0 "${CURRENT_TAG}^" 2>/dev/null || echo "")
+          echo "current=${CURRENT_TAG}" >> $GITHUB_OUTPUT
+          echo "previous=${PREV_TAG}" >> $GITHUB_OUTPUT
+
+      - name: Get git changes
+        id: changes
+        run: |
+          CURRENT="${{ steps.tags.outputs.current }}"
+          PREV="${{ steps.tags.outputs.previous }}"
+
+          if [ -n "$PREV" ]; then
+            LOG=$(git log "${PREV}..${CURRENT}" --oneline --no-merges)
+            STAT=$(git diff "${PREV}..${CURRENT}" --stat)
+          else
+            LOG=$(git log "${CURRENT}" --oneline --no-merges --max-count=20)
+            STAT=$(git diff HEAD~1..HEAD --stat)
+          fi
+
+          {
+            echo "log<<ENDOFLOG"
+            echo "$LOG"
+            echo "ENDOFLOG"
+          } >> $GITHUB_OUTPUT
+
+          {
+            echo "stat<<ENDOFSTAT"
+            echo "$STAT"
+            echo "ENDOFSTAT"
+          } >> $GITHUB_OUTPUT
+
+      - name: Generate release notes with AI
+        id: ai_notes
+        env:
+          # Opción A: Claude (recomendado)
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Opción B: OpenAI (descomentar y comentar el bloque de Claude en el script)
+          # OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CURRENT_TAG: ${{ steps.tags.outputs.current }}
+          PREVIOUS_TAG: ${{ steps.tags.outputs.previous }}
+          GIT_LOG: ${{ steps.changes.outputs.log }}
+          GIT_STAT: ${{ steps.changes.outputs.stat }}
+        run: |
+          python3 << 'PYTHON'
+          import os, json, urllib.request
+
+          tag = os.environ["CURRENT_TAG"]
+          prev = os.environ["PREVIOUS_TAG"] or "inicio del proyecto"
+          git_log = os.environ["GIT_LOG"]
+          git_stat = os.environ["GIT_STAT"]
+
+          prompt = f"""Eres un técnico de software. Genera release notes profesionales en español para la versión {tag}.
+
+          Cambios desde {prev}:
+
+          COMMITS:
+          {git_log}
+
+          ARCHIVOS MODIFICADOS:
+          {git_stat}
+
+          Formato esperado:
+          ## ¿Qué hay de nuevo en {tag}?
+
+          ### Nuevas funcionalidades
+          - ...
+
+          ### Correcciones
+          - ...
+
+          ### Cambios técnicos
+          - ...
+
+          Sé conciso y usa lenguaje orientado al equipo técnico."""
+
+          # --- Opción A: Claude ---
+          api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+          payload = {
+              "model": "claude-sonnet-4-6",
+              "max_tokens": 1024,
+              "messages": [{"role": "user", "content": prompt}]
+          }
+          req = urllib.request.Request(
+              "https://api.anthropic.com/v1/messages",
+              data=json.dumps(payload).encode(),
+              headers={
+                  "x-api-key": api_key,
+                  "anthropic-version": "2023-06-01",
+                  "content-type": "application/json"
+              }
+          )
+          with urllib.request.urlopen(req) as res:
+              notes = json.loads(res.read())["content"][0]["text"]
+
+          # --- Opción B: OpenAI (comentar bloque anterior y descomentar este) ---
+          # api_key = os.environ.get("OPENAI_API_KEY", "")
+          # payload = {
+          #     "model": "gpt-4o",
+          #     "messages": [{"role": "user", "content": prompt}]
+          # }
+          # req = urllib.request.Request(
+          #     "https://api.openai.com/v1/chat/completions",
+          #     data=json.dumps(payload).encode(),
+          #     headers={"Authorization": f"Bearer {api_key}", "content-type": "application/json"}
+          # )
+          # with urllib.request.urlopen(req) as res:
+          #     notes = json.loads(res.read())["choices"][0]["message"]["content"]
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("notes<<ENDOFNOTES\n")
+              f.write(notes + "\n")
+              f.write("ENDOFNOTES\n")
+          PYTHON
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.DOWNSTREAM_PR_TOKEN }}
+        run: |
+          gh release create "${{ steps.tags.outputs.current }}" \
+            --title "Release ${{ steps.tags.outputs.current }}" \
+            --notes "${{ steps.ai_notes.outputs.notes }}" \
+            --latest
